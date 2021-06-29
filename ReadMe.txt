@@ -1,1 +1,1 @@
-In order to run this, you need to give it Admin priveledges, on both the installer and the shortcut to run the Application or it will not have the ability to read required files.
+As of Version 1.4.0, you are now required to register for a API Key.
