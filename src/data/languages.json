@@ -1,0 +1,53 @@
+{
+    "languages": [
+        {
+            "name": "english",
+            "string": {
+                "navbar_commands": "Commands",
+                "navbar_chat": "Chat",
+                "navbar_odyseechatterbot": "Odysee Chatter Bot",
+                "navbar_settings": "Settings",
+                "navbar_lbc": "Donate LBC",
+                "navbar_bmac": "Buy me a coffee",
+                "navbar_logout": "Logout",
+                "settings_page": {
+                    "h1_settings": "Settings",
+                    "label_tip_chat_announcement": "Tip Chat Announcement:",
+                    "tip_chat_announcement_disabled": "Disabled",
+                    "tip_chat_announcement_enabled": "Enabled",
+                    "label_tip_notification": "Tip Notification:",
+                    "tip_notification_disabled": "Disabled",
+                    "tip_notification_enabled": "Enabled",
+                    "label_fiat_notification_amount": "Fiat Notification Amount:",
+                    "label_lbc_notification_amount": "LBC Notification Amount:",
+                    "label_language": "Language:",
+                    "button_submit": "Submit"
+                },
+                "commands_page": {
+                    "Command_Create": "Create Command",
+                    "option_row_1": "Row 1",
+                    "option_row_2": "Row 2",
+                    "option_row_3": "Row 3",
+                    "option_command": "Command",
+                    "option_timer": "Timer",
+                    "Command_Remove": "Remove Command"
+                },
+                "main_page": {
+                    "h3_about": "About",
+                    "label_version": "Version:",
+                    "report_issues": "Report issues: ",
+                    "suggest_features": "Suggest features: ",
+                    "h3_useful_resources": "Useful resources:",
+                    "livestream_settings": "Odysee Livestream Settings:"
+                },
+                "noclaimid_page": {
+                    "label_email_address": "Email Address:",
+                    "label_claim_id": "Claim Id:",
+                    "submit": "Submit",
+                    "tos": "By submitting your Claim Id to Odysee-Chatter.com, you are agreeing to not abuse Odysee-Chatter",
+                    "tos2": "site in anyway and in doing so, Odysee-Chatter can terminate your account at any moment."
+                }
+            }
+        }
+    ]
+}

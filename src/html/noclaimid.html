@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="http://localhost:4187/files/css/index.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src='http://localhost:4187/files/js/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src='http://localhost:4187/files/js/languages.js'></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <style>
+            div.panel.panel-default {
+                background-color: #241c30;
+                border-color: transparent;
+            }
+            label.input-group-addon {
+                background-color: #241c30;
+                border-color: transparent;
+                color: white;
+            }
+            label.input-group-addon.tos {
+                width: auto !important;
+                text-indent: 25%;
+            }
+            label.input-group-addon.tos2 {
+                width: auto !important;
+                text-indent: 33.5%;
+                top: -25px;
+                position: relative;
+            }
+            input.form-control {
+                background-color: #241c30 !important;
+                border-color: transparent;
+                color: white;
+            }
+            input.form-control.ClaimId {
+                background-color: #181021 !important;
+            }
+            button.form-control.button {
+                background-color: #181021 !important;
+	            border-radius: 25px !important;
+	            padding: 10px !important;
+	            color: white !important;
+                text-align: center;
+
+                border-width: 2px;
+                border-style: outset;
+                border-color: rgb(118, 118, 118) !important;
+            }
+            button.form-control.button:active,
+            button.form-control.button:focus {
+                background-color: #181021 !important;
+	            border-radius: 25px !important;
+	            padding: 10px !important;
+	            color: white !important;
+                text-align: center;
+                border-width: 2px;
+                border-style: outset;
+                border-color: rgb(118, 118, 118) !important;
+            }
+        </style>
+        <script>
+            function alerter (form) {
+				swal({
+                    title: "",
+                    text: `Thank you for submitting your Claim ID, please restart the App.`,
+                    icon: "warning"
+                });
+			}
+        </script>
+	</head>
+	<body onload="ReadNoclaimidPage_Language()">
+		<nav class="navbar">
+			<div class="navbar-collapse collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item name">
+                        <button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="">Odysee Chatter Bot</button>
+                    </li>
+
+                    <li class="nav-item logout">
+                        <button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
+                    </li>
+				</ul>
+			</div>
+  		</nav>
+		<div class="container">
+            <form id="myform" name="myform" action="https://odysee-chatter.com/api/getClaimId" method="POST" target="hiddenFrame" onsubmit="this.form">
+                <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+
+                <div class="panel panel-default">
+                    <div class="input-group">
+                        <label id="label-email-address" class="input-group-addon" style="width: 105px;">Email Address:</label>
+                        <input class="form-control" name="EmailAddress" type="text" value="<%= user.email %>" style="width: 300px;" readonly>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label id="label-claim-id" class="input-group-addon" style="width: 65px;">Claim Id:</label>
+                        <input class="form-control ClaimId" name="ClaimId" type="text" value="" style="width: 300px;">
+                    </div>
+
+                    <div class="panel panel-default">
+                        <button id="submit" class="form-control button" type="submit" name="button" onclick="alerter(form)">Submit</button>
+                        <br>
+                        <label id="tos" class="input-group-addon tos">
+                            By submitting your Claim Id to Odysee-Chatter.com, you are agreeing to not abuse Odysee-Chatter
+                        </label>
+                        <br>
+                        <label id="tos2" class="input-group-addon tos2">
+                            site in anyway and in doing so, Odysee-Chatter can terminate your account at any moment.
+                        </label>
+                    </div>
+                </div>
+            </form>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,284 @@
+html,
+body {
+	padding: 0;
+	margin: 0;
+	background-color: #181021 !important;
+	background-image: url('https://odysee-chatter.com/files/img/Streaming.png');
+	background-position: top center;
+	background-repeat: repeat-y;
+	background-size: 1920px;
+}
+
+/* Use OS default fonts */
+body {
+	font-family:
+		system-ui,
+		-apple-system,
+		'Segoe UI',
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif,
+		'Apple Color Emoji',
+		'Segoe UI Emoji';
+	text-rendering: optimizeLegibility;
+	font-feature-settings: 'liga', 'clig', 'kern';
+	color: white;
+}
+
+div.body {
+	position: absolute;
+	text-align: center;
+	top:  50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.form-group {
+	text-align: center;
+}
+
+header h1 {
+	font-size: 60px;
+	font-weight: 200;
+	margin: 0;
+	padding: 0;
+	opacity: 0.7;
+}
+iframe {
+	border: 0;
+	margin-left: 10px;
+	width: 98%;
+	height: 80%;
+}
+h1 {
+	margin-top: -10px;
+}
+
+button.nav-link {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 10px;
+	color: white;
+	margin-right: 5px;
+}
+button.nav-link-embeddedcommand {
+	background-color: #181021;
+	border-radius: 15px;
+	padding: 7.5px;
+	color: white;
+}
+li.nav-item {
+	margin-top: 4px;
+}
+li.nav-item.logout {
+	margin-top: 4px;
+	position: absolute;
+	right: 10px;
+}
+li.nav-item.bmac {
+	margin-top: 4px;
+	position: absolute;
+	right: 80px;
+}
+li.nav-item.lbc {
+	margin-top: 4px;
+	position: absolute;
+	right: 210px;
+}
+li.nav-item.name {
+	margin-top: 4px;
+	position: absolute;
+	right: 50%;
+}
+li.nav-item.stats {
+	margin-top: 4px;
+	position: absolute;
+	right: 58%;
+}
+li.nav-item.settings {
+	margin-top: 4px;
+	position: absolute;
+	right: 45.75%;
+}
+nav.navbar {
+	background-color: #241c30;
+}
+ul.navbar-nav {
+	list-style-type: none;
+}
+div.container {
+	background-color: #241c30;
+	color: white;
+}
+div#messageContainer.messageContainer {
+	overflow:auto;
+	overflow-y: none;
+	display:flex;
+	flex-direction:column-reverse;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-bottom: 25px;
+}
+div#comment {
+	background-color: #241c30;
+	color: white;
+	word-wrap: break-word;
+	margin-top: 2.5px;
+	padding: 5px 10px 5px 10px;
+	border-radius: 15px;
+}
+a#streamer {
+	color: #e50054;
+}
+a#moderator {
+	color: inherit;
+}
+a#user {
+	color: inherit;
+}
+div.commandContainer {
+	/*background-color: #181021;*/
+	background-color: transparent !important;
+	color: white;
+	width: 100%;
+	display: flex;
+}
+div.commandBlackspace {
+	/*background-color: #181021;*/
+	background-color: transparent !important;
+	padding: 0px 15px 15px 15px;
+	flex: 33.33%;
+}
+div.commands {
+	border-radius: 15px;
+	background-color: #241c30;
+	padding: 10px 15px 10px 15px;
+
+	height: 100%;
+	position:relative;
+	z-index: 1;
+	overflow-x: hidden;
+}
+input.Command {
+	color: black !important;
+}
+button.commandRow1 {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 10px;
+	color: white;
+	z-index: 5;
+	position: relative;
+	top: -50px;
+	right: -190px;
+}
+
+button.commandRow2 {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 10px;
+	color: white;
+	z-index: 5;
+	position: relative;
+	top: -50px;
+	right: -190px;
+}
+
+button.commandRow3 {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 10px;
+	color: white;
+	z-index: 5;
+	position: relative;
+	top: -50px;
+	right: -190px;
+}
+
+div.commandContainerSpecial {
+	/*background-color: #181021;*/
+	background-color: transparent !important;
+	color: white;
+	width: 100%;
+	display: flex;
+}
+div.commandBlackspaceSpecial {
+	/*background-color: #181021;*/
+	background-color: transparent !important;
+	padding: 0px 0px 20px 0px;
+	flex: 33.3%;
+}
+div.commandsSpecial {
+	background-color: #241c30;
+	padding: 10px 0px 10px 0px;
+
+	height: 100%;
+	position:relative;
+	z-index: 1;
+	overflow-x: hidden;
+}
+button.commandCreate {
+	background-color: #181021;
+	border-radius: 50px;
+	padding: 15px;
+	color: white;
+	position: relative;
+}
+button.commandRemove {
+	background-color: #181021;
+	border-radius: 50px;
+	padding: 15px;
+	color: white;
+	position: relative;
+}
+
+select.command {
+	color: black;
+}
+
+button.form-control.settings-button {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 20px;
+	color: white;
+	line-height: 0px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: rgb(118, 118, 118) !important;
+}
+
+label.input-group-addon.settings {
+	background-color: #241c30;
+	color: white;
+}
+input#fiatnotificationamount.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+input#lbcnotificationamount.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+select#tipappnotification.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+select#tipchatnotification.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+select#language.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+select#error_report.form-control.settings {
+	background-color: #241c30;
+	color: white;
+}
+
+div#do {
+	width: 250px;
+	position: relative;
+	left: 40%;
+}

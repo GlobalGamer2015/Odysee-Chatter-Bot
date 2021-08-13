@@ -1,0 +1,9 @@
+/src/node_modules
+/src/dist/.icon-ico
+/src/dist/win-unpacked
+/src/dist/builder-debug.yml
+/src/dist/builder-effective-config.yaml
+/src/dist/latest.yml
+/src/dist/Odysee Chatter Bot Setup*
+/src/config.json
+Odysee_Chatter_Bot_Client.code-workspace

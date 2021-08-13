@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="http://localhost:4187/files/css/index.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src='http://localhost:4187/files/js/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src='http://localhost:4187/files/js/languages.js'></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	</head>
+	<body onload="readSettings(), ReadSettingsPage_Language()">
+		<nav class="navbar">
+			<div class="navbar-collapse collapse">
+                <ul class="navbar-nav">
+					<li class="nav-item">
+						<button id="navbar-commands" type="button" class="nav-link" onclick="OnClick('commands')">Commands</button>
+					</li>
+					<li class="nav-item">
+					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
+				 	</li>
+
+				  	<li class="nav-item name">
+					  	<button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('odysee chatter bot')">Odysee Chatter Bot</button>
+				  	</li>
+				  	<li class="nav-item settings">
+					  	<button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  	</li>
+
+				  	<li class="nav-item lbc">
+					  	<button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  	</li>
+				  	<li class="nav-item bmac">
+					  	<button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  	</li>
+				  	<li class="nav-item logout">
+					  	<button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
+				  	</li>
+				</ul>
+			</div>
+  		</nav>
+		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
+            <h1 id="h1-settings" style="text-align: center;">Settings</h1>
+
+            <form id="myform" name="myform" target="hiddenFrame" onsubmit="">
+                <iframe name="hiddenFrame" width="0" height="0" border="0" style="display: none;"></iframe>
+
+				<div class="input-group">
+					<label class="input-group-addon settings" id="label_tip_chat_announcement">Tip Chat Announcement:</label>
+					<select class="form-control settings" id="tipchatnotification" name="tipchatnotification" style="width: 25%;">
+						<option id="tip_chat_announcement_disabled" value="disabled" selected>Disabled</option>
+						<option id="tip_chat_announcement_enabled" value="enabled">Enabled</option>
+					</select>
+				</div>
+
+				<div class="input-group">
+					<label id="label_tip_notification" class="input-group-addon settings">Tip Notification:</label>
+					<select class="form-control settings" id="tipappnotification" name="tipappnotification" style="width: 25%;">
+						<option id="tip_notification_disabled" value="disabled" selected>Disabled</option>
+						<option id="tip_notification_enabled" value="enabled">Enabled</option>
+					</select>
+				</div>
+
+                <div class="input-group">
+                    <label id="label_fiat_notification_amount" class="input-group-addon settings">Fiat Notification Amount:</label>
+                    <input class="form-control settings" type="number" min="1" id="fiatnotificationamount" name="fiatnotificationamount" style="width: 25%;">
+                </div>
+
+                <div class="input-group">
+                    <label id="label_lbc_notification_amount" class="input-group-addon settings">LBC Notification Amount:</label>
+                    <input class="form-control settings" type="number" min="1" id="lbcnotificationamount" name="lbcnotificationamount" style="width: 25%;">
+                </div>
+
+				<div class="input-group">
+                    <label id="label_language" class="input-group-addon settings">Language:</label>
+                    <select class="form-control settings" id="language" name="language" style="width: 150px;">
+						<!-- This is added in via languages.js Javascript -->
+					</select>
+                </div>
+
+				<div class="input-group">
+					<label id="label_error_report" class="input-group-addon settings">Send error reports?:</label>
+					<select class="form-control settings" id="error_report" name="error_report" style="width: 150px;">
+						<option value="disabled" selected>Disabled</option>
+						<option value="enabled">Enabled</option>
+					</select>
+				</div>
+
+                <br>
+
+                <button id="button_submit" class="form-control settings-button" type="submit" name="settings-button" onclick="updateSettings(form)">Submit</button>
+            </form>
+		</div>
+	</body>
+</html>

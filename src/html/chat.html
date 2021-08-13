@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<link rel="stylesheet" href="http://localhost:4187/files/css/index.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src='http://localhost:4187/files/js/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src='http://localhost:4187/files/js/languages.js'></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <script src="http://localhost:4187/files/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io("http://localhost:4187");
+            socket.on('addComment', (event) => {
+                const message = document.getElementById("messageContainer");
+
+                const url = event.channel;
+                const url_odysee = url.split("lbry://")
+                const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
+
+				if(event.alert == "tip"){
+					if(event.tip_currency == "LBC"){
+						message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · Tip detected: <a id="user" href="${url_odysee_complete}">${event.username}</a> tipped ${event.tip} ${event.tip_currency}!</div>`;
+					}
+					else if(event.tip_currency == "USD"){
+						message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · Tip detected: <a id="user" href="${url_odysee_complete}">${event.username}</a> tipped $${event.tip} ${event.tip_currency}!</div>`;
+					}
+				}
+                if(event.user == "streamer"){
+                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="streamer" href="${url_odysee_complete}">Streamer ${event.username}</a>: ${event.message}</div>`;
+                }
+                else if(event.user == "moderator"){
+                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
+                }
+                else if(event.user == "user"){
+                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="user" href="${url_odysee_complete}">${event.username}</a>: ${event.message}</div>`;
+                }
+
+				const tutorialMessage = document.getElementById("tutorial");
+				if(tutorialMessage) {
+					tutorialMessage.remove();
+				}
+            });
+        </script>
+	</head>
+	<body onload="readChatHistory(), ReadChatPage_Language()">
+        <nav class="navbar">
+			<div class="navbar-collapse collapse">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<button id="navbar-commands" type="button" class="nav-link" onclick="OnClick('commands')">Commands</button>
+					</li>
+					<li class="nav-item">
+					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
+				 	</li>
+
+				  	<li class="nav-item name">
+					  	<button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('odysee chatter bot')">Odysee Chatter Bot</button>
+				  	</li>
+				  	<li class="nav-item settings">
+					  	<button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  	</li>
+
+				  	<li class="nav-item lbc">
+					  	<button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  	</li>
+				  	<li class="nav-item bmac">
+					  	<button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  	</li>
+				  	<li class="nav-item logout">
+					  	<button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
+				  	</li>
+				</ul>
+			</div>
+  		</nav>
+		<div id="messageContainer" class="messageContainer" style="margin-top: -10px;">
+            
+			<div id="tutorial">
+				<div id="comment"><span id="time">00.00 PM</span> · <a id="streamer" href="https://www.odysee.com/@GG2015#b8fbd24ab4644148cfed022732c48677cf662047">Streamer GG2015</a>: This is where chat appears. This message will disappear after your first chat message.</div>
+			</div>
+        </div>
+	</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="http://localhost:4187/files/css/index.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src='http://localhost:4187/files/js/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src='http://localhost:4187/files/js/languages.js'></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	</head>
+	<body onload="version(), ReadMainPage_Language()">
+		<nav class="navbar">
+			<div class="navbar-collapse collapse">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<button id="navbar-commands" type="button" class="nav-link" onclick="OnClick('commands')">Commands</button>
+					</li>
+					<li class="nav-item">
+					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
+				 	</li>
+
+				  	<li class="nav-item name">
+					  	<button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('odysee chatter bot')">Odysee Chatter Bot</button>
+				  	</li>
+				  	<li class="nav-item settings">
+					  	<button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  	</li>
+
+				  	<li class="nav-item lbc">
+					  	<button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  	</li>
+				  	<li class="nav-item bmac">
+					  	<button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  	</li>
+				  	<li class="nav-item logout">
+					  	<button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
+				  	</li>
+				</ul>
+			</div>
+  		</nav>
+		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
+			<!-- Will be used in the future. -->
+			<div id="motd">
+				<!-- Message of the day. -->
+			</div>
+
+			<div id="about">
+				<h3 id="h3-about">About</h3>
+				<label id="label-version">Version:</label> <span id="version"></span>
+				<br><label id="report-issues">Report issues:</label> <a href="https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/issues/new?assignees=GlobalGamer2015&labels=bug&template=bug_report.md&title=">Github</a>
+				<br><label id="suggest-features">Suggest features:</label> <a href="https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/issues/new?assignees=GlobalGamer2015&labels=enhancement&template=feature_request.md&title=">Github</a>
+			</div>
+
+			<div>
+				<h3 id="h3-useful-resources">Useful resources:</h3>
+				<label id="livestream-settings">Odysee Livestream Settings:</label> <a href="https://odysee.com/$/livestream" target="_blank">URL</a>
+				<br><label>LBRYlytics:</label> <a href="https://www.lbrylytics.com" target="_blank">URL</a>
+			</div>
+
+			<div id="do">
+				<a href="https://m.do.co/c/2b5167b5ded1">
+                    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg">
+                </a>
+			</div>
+		</div>
+	</body>
+</html>

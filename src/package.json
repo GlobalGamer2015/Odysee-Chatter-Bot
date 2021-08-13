@@ -1,0 +1,113 @@
+{
+	"name": "odyseechatterbot",
+	"productName": "Odysee Chatter Bot",
+	"version": "1.0.4",
+	"description": "Chat Bot Application for Odysee.",
+	"author": "GG2015",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/GlobalGamer2015/Odysee-Chatter-Bot.git"
+	},
+	"scripts": {
+		"postinstall": "electron-builder install-app-deps",
+		"start": "electron .",
+		"prepack": "yarn electron-builder --dir",
+		"pack": "yarn electron-builder --prepackaged ./dist/win-unpacked --windows",
+		"browserify": "browserify ./html/js/lock.js -o ./html/js/lock_build.js"
+	},
+	"dependencies": {
+		"@babel/core": "^7.14.6",
+		"ejs": "^3.1.6",
+		"electron-alert": "^0.1.16",
+		"electron-context-menu": "^3.0.0",
+		"electron-debug": "^3.2.0",
+		"electron-log": "^4.3.5",
+		"electron-store": "^8.0.0",
+		"electron-unhandled": "^3.0.2",
+		"electron-updater": "^4.3.8",
+		"electron-util": "^0.15.1",
+		"express": "^4.17.1",
+		"express-openid-connect": "^2.5.0",
+		"got": "^11.8.2",
+		"node-fetch": "^2.6.1",
+		"pug": "^3.0.2",
+		"request": "^2.88.2",
+		"socket.io": "^4.1.2",
+		"user-timezone": "^1.0.3",
+		"ws": "^7.4.6"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.14.7",
+		"babel-preset-es2015": "^6.24.1",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-0": "^6.24.1",
+		"babelify": "^10.0.0",
+		"browserify": "^17.0.0",
+		"electron": "^12.0.6",
+		"electron-builder": "^22.10.5",
+		"electron-squirrel-startup": "^1.0.0",
+		"np": "^7.5.0",
+		"xo": "^0.42.0"
+	},
+	"xo": {
+		"envs": [
+			"node",
+			"browser"
+		]
+	},
+	"browserify": {
+		"transform": [
+			[
+				"babelify",
+				{
+					"presets": [
+						"@babel/preset-env"
+					]
+				}
+			]
+		]
+	},
+	"np": {
+		"publish": false,
+		"releaseDraft": false
+	},
+	"build": {
+		"afterPack": "./build/AfterPackHook.js",
+		"appId": "com.GG2015.OdyseeChatterBot",
+		"extraFiles": [
+			{
+				"from": "./data/languages.json",
+				"to": "./data/languages.json"
+			},
+			{
+				"from": "./app-update.yml",
+				"to": "./resources/app-update.yml"
+			},
+			{
+				"from": "./ENDUSER_LICENSE",
+				"to": "./LICENSE.odyseechatter_enduser.txt"
+			}
+		],
+		"win": {
+			"target": [
+				"nsis"
+			],
+			"icon": "build/icon.ico"
+		},
+		"nsis": {
+			"include": "build/installer.nsh",
+			"installerIcon": "build/icon.ico",
+			"uninstallerIcon": "build/icon.ico",
+			"license": "ENDUSER_LICENSE",
+			"runAfterFinish": false,
+			"allowToChangeInstallationDirectory": true,
+			"oneClick": false,
+			"perMachine": false,
+			"multiLanguageInstaller": true,
+			"createDesktopShortcut": true,
+			"createStartMenuShortcut": true,
+			"menuCategory": true,
+			"deleteAppDataOnUninstall": false
+		}
+	}
+}
