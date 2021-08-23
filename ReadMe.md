@@ -7,7 +7,7 @@ A Chat Bot Application for [Odysee.com](https://www.Odysee.com)
 If you enjoy and like using the App, be sure to click the Star at top right of your page.
 
 ## Installation
-If installing from source code then follow this [documentation](https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/docs/Source-Code.md).
+If installing from source code then follow this [documentation](https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/blob/main/docs/Source-Code.md).
 
 Download the latest release from the [releases](https://github.com/GlobalGamer2015/Odysee-Chatter-Bot) page.  
 Currently there is only Windows release as I do not have Linux or Mac OS.
