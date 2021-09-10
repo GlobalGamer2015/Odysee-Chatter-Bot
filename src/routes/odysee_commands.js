@@ -26,18 +26,23 @@ module.exports = function(comment, claimid, Claim_Id, Api_Key) {
             Alert.ShowErrorMessage(err)
         }
         commands.forEach(command => {
-            fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/commands/${command}`, 'utf8', function(err, commandInformation) {
-                if(err) {
-                    Alert.ShowErrorMessage(err)
-                }
-                const commandInformationParsed = JSON.parse(commandInformation);
-
-                if(commandInformationParsed.type == "Command") {
-                    if(msg == commandInformationParsed.name && commandInformationParsed.active == true) {
-                        API.createComment(commandInformationParsed.reply, claimid, Claim_Id, Api_Key);
+            try {
+                fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/commands/${command}`, 'utf8', function(err, commandInformation) {
+                    if(err) {
+                        Alert.ShowErrorMessage(err)
                     }
-                }
-            })
+                    const commandInformationParsed = JSON.parse(commandInformation);
+
+                    if(commandInformationParsed.type == "Command") {
+                        if(msg == commandInformationParsed.name && commandInformationParsed.active == true) {
+                            API.createComment(commandInformationParsed.reply, claimid, Claim_Id, Api_Key);
+                        }
+                    }
+                })
+            }
+            catch(e) {
+                Alert.ShowErrorMessage(e)
+            }
         })
     })
     fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/embedded_commands.json`, 'utf8', function(err, data) {
@@ -47,26 +52,23 @@ module.exports = function(comment, claimid, Claim_Id, Api_Key) {
         embedded_commands = JSON.parse(data)
         var commands = embedded_commands.commands;
         commands.forEach(function(command) {
-            if(command.name == "shoutout") {
-                if(command.enabled == true) {
-                    if(is_creator == true || is_moderator == true) {
-                        if(msg.startsWith("!so ")) {
-                            var shoutout_user = msg.split("!so ")
-                            var user = shoutout_user[1];
+            try {
+                if(command.name == "shoutout") {
+                    if(command.enabled == true) {
+                        if(is_creator == true || is_moderator == true) {
+                            if(msg.startsWith("!so ")) {
+                                var shoutout_user = msg.split("!so ")
+                                var user = shoutout_user[1];
                             
-                            command_reply = command.reply.replace("<user>", user);
-                            API.createComment(command_reply, claimid, Claim_Id, Api_Key);
-                            
-                            /*if(command.reply.contains("<user>")) {
-                                var command_reply = command.reply.replace("<user>", user);
+                                command_reply = command.reply.replace("<user>", user);
                                 API.createComment(command_reply, claimid, Claim_Id, Api_Key);
                             }
-                            else {
-                                API.createComment(command.reply, claimid, Claim_Id, Api_Key);
-                            }*/
                         }
                     }
                 }
+            }
+            catch(e) {
+                Alert.ShowErrorMessage(e)
             }
         })
     })
