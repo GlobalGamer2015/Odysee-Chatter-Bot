@@ -282,3 +282,14 @@ div#do {
 	position: relative;
 	left: 40%;
 }
+
+button#timer {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 10px;
+	color: white;
+	z-index: 5;
+	position: relative;
+	top: -50px;
+	right: -190px;
+}
