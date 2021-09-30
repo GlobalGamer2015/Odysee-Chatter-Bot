@@ -17,6 +17,7 @@ const unhandled = require('electron-unhandled');
 const contextMenu = require('electron-context-menu');
 const Api = require('./routes/api')();
 const Alert = require('electron-alert');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 autoUpdater.setFeedURL({
 	provider: 'github',
