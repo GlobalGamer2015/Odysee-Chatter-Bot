@@ -19,7 +19,6 @@ function popupWindow(html) {
 
     const { BrowserWindow } = require('@electron/remote')
     const { is } = require('electron-util');
-    is.development = true;
 
     let popupWindow;
     if(is.development) {
