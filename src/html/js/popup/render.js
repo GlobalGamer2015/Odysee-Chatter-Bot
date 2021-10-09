@@ -97,7 +97,7 @@ function Option_Pin(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -161,7 +161,7 @@ function Option_UnPin(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -233,7 +233,7 @@ function Option_AddAsModerator(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -304,7 +304,7 @@ function Option_RemoveAsModerator(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -346,11 +346,11 @@ function Option_Remove(tempData,sdk) {
                         Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
                         .then(signed => {
                             fetch(`https://comments.odysee.com/api/v2?m=comment.Abandon`, {
-		                    method: 'post',
-		                    headers: {
-		                        'Content-Type': 'application/json'
-	                        },
-                            body: `{ "jsonrpc":"2.0", "id":1, "method":"comment.Abandon", "params":{ "comment_id":"${comment_id}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" } }`
+		                        method: 'post',
+		                        headers: {
+		                            'Content-Type': 'application/json'
+	                            },
+                                body: `{ "jsonrpc":"2.0", "id":1, "method":"comment.Abandon", "params":{ "comment_id":"${comment_id}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" } }`
 	                        })
                             .then(res => res.json())
                             .then(res => {
@@ -361,12 +361,12 @@ function Option_Remove(tempData,sdk) {
                                         text: "Comment has been removed.",
                                         icon: "success"
                                     })
-                                    return test(comment_id);
+                                    return removeComment(comment_id);
                                 }
                                 else {
                                     swal({
                                         title: "Error",
-                                        text: `An error has occurred.\n${res}`,
+                                        text: `An error has occurred.\nError: ${res.error.message}`,
                                         icon: "error"
                                     })
                                 }
@@ -428,7 +428,7 @@ function Option_Block_Perm(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -491,7 +491,7 @@ function Option_Block_Temp(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
@@ -554,7 +554,7 @@ function Option_Block_Unban(tempData,sdk) {
                                     else {
                                         swal({
                                             title: "Error",
-                                            text: `An error has occurred.\n${res}`,
+                                            text: `An error has occurred.\n${res.error.message}`,
                                             icon: "error"
                                         })
                                     }
