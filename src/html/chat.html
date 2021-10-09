@@ -17,6 +17,11 @@
 		<script src='http://localhost:4187/files/js/languages.js'></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+		<script>
+			function popupWindowDatapasser(button_data) {
+				popupWindow(button_data)
+			}
+		</script>
         <script src="http://localhost:4187/files/socket.io/socket.io.js"></script>
         <script>
             var socket = io("http://localhost:4187");
@@ -26,6 +31,8 @@
                 const url = event.channel;
                 const url_odysee = url.split("lbry://")
                 const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
+
+				const creator_tools_button_image = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon--MoreVertical" aria-hidden="true"><g><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></g></svg>';
 
 				if(event.alert == "tip"){
 					if(event.tip_currency == "LBC"){
@@ -46,13 +53,13 @@
                             <path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path>
                             <path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path>
                         </svg>`;
-                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="streamer" href="${url_odysee_complete}">${streamerImage} ${event.username}</a>: ${event.message}</div>`;
+                    message.innerHTML += `<div id="comment" name="${event.comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.username}" data-streamer-id="${event.channel.replace(`lbry://${event.username}#`, '')}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamerImage} ${event.username}</a>: ${event.message}</div>`;
                 }
                 else if(event.user == "moderator"){
-                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
+                    message.innerHTML += `<div id="comment" name="${event.comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.username}" data-streamer-id="${event.channel.replace(`lbry://${event.username}#`, '')}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
                 }
                 else if(event.user == "user"){
-                    message.innerHTML += `<div id="comment"><span id="time">${event.time}</span> · <a id="user" href="${url_odysee_complete}">${event.username}</a>: ${event.message}</div>`;
+                    message.innerHTML += `<div id="comment" name="${event.comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.username}" data-streamer-id="${event.channel.replace(`lbry://${event.username}#`, '')}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${event.username}</a>: ${event.message}</div>`;
                 }
 
 				const tutorialMessage = document.getElementById("tutorial");
@@ -60,9 +67,22 @@
 					tutorialMessage.remove();
 				}
             });
+
+			window.addEventListener('storage', function(e) {
+				console.log(e)
+				if(e.key === "removeComment") {
+					if(e.oldValue !== e.newValue) {
+						document.getElementsByName(e.newValue).forEach(value_element => {
+							value_element.remove()
+						})
+
+						removeComment(e.newValue)
+					}
+				}
+			})
         </script>
 	</head>
-	<body onload="readChatHistory(), ReadChatPage_Language()">
+	<body onload="readChatHistory(), ReadChatPage_Language(), Reaction(), SubCount(), Viewers(), StreamViews(), SuperChat()">
         <nav class="navbar">
 			<div class="navbar-collapse collapse">
 				<ul class="navbar-nav">
@@ -92,8 +112,44 @@
 				</ul>
 			</div>
   		</nav>
-		<div id="messageContainer" class="messageContainer" style="margin-top: -10px;">
-            
+		<div class="container flex-direction" style="width: 100%; background-color: transparent; margin-top: -5px; margin-bottom: 20px; display: inline-flex;">
+			<div class="childcontainer">
+				<div class="viewers">
+					<label>Viewers:</label> <span id="viewCount">0</span>
+				</div>
+				<div class="followers">
+					<label>Followers:</label> <span id="followers">0</span>
+				</div>
+				<div class="reaction_likes">
+					<label>Likes:</label> <span id="reaction_likes">0</span>
+				</div>
+				<div class="reaction_dislikes">
+					<label>Dislikes:</label> <span id="reaction_dislikes">0</span>
+				</div>
+				<div class="streamViews">
+					<label>Stream Views:</label> <span id="streamViews">0</span>
+				</div>
+				<div class="currency">
+					<label>Currency:</label> <span id="currency">0</span>
+				</div>
+				<div class="support_amount">
+					<label>Support Amount:</label> <span id="support_amount">0</span>
+				</div>
+			</div>
+
+			<div class="superchats_wrapper">
+				<div id="livestream-superchats__inner" class="livestream-superchats__inner">
+				</div>
+			</div>
+		</div>
+		
+		<div style="background-color: transparent;">
+			<div id="update_chat" class="update_chat">
+				<label onclick="UpdateChat()">Update Chat</label>
+			</div>
+		</div>
+
+		<div id="messageContainer" class="messageContainer">
 			<div id="tutorial">
 				<div id="comment"><span id="time">00.00 PM</span> · <a id="streamer" href="https://www.odysee.com/@GG2015#b8fbd24ab4644148cfed022732c48677cf662047">Streamer GG2015</a>: This is where chat appears. This message will disappear after your first chat message.</div>
 			</div>

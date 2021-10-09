@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<link rel="stylesheet" href="http://localhost:4187/files/css/popup.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src='http://localhost:4187/files/js/popup/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src='http://localhost:4187/files/js/languages.js'></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            // Request Query Data
+            const tempData = {
+                name: '<%= data.name %>',
+                id: '<%= data.id %>',
+                comment_id: '<%= data.comment_id %>',
+            };
+            let sdk = {};
+
+            function test(comment_id) {
+                window.localStorage.setItem('removeComment', comment_id)
+            }
+        </script>
+	</head>
+	<body onload="Interacter(tempData,sdk)">
+        <div id="menu" class="menu__list">
+            <div class="menu__option" style="padding: 1.0px 1px 1px 1px;">
+                <div class="comment__menu-option menu__link" role="menuitem" tabindex="-1" onclick="Option_Pin(tempData,sdk)" id="Option_Pin">
+                    <div class="menu__link">
+                        <svg size="16" class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-6 0 26 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.3333333,6 C11.3333333,8.94666667 8.94666667,11.3333333 6,11.3333333 C3.056,11.3333333 0.666666667,8.94666667 0.666666667,6 C0.666666667,3.05466667 3.056,0.666666667 6,0.666666667 C8.94666667,0.666666667 11.3333333,3.05466667 11.3333333,6 L11.3333333,6 Z"></path><line x1="6" y1="11.3333333" x2="6" y2="23.3333333"></line><path d="M6,3.33333333 C7.47333333,3.33333333 8.66666667,4.528 8.66666667,6"></path>
+                        </svg>
+                        <span class="comment__menu-name">Pin</span>
+                    </div>
+                    <span class="comment__menu-help">Pin this comment.</span>
+                </div>
+
+                <div class="comment__menu-option menu__link" role="menuitem" tabindex="-1" onclick="Option_UnPin(tempData,sdk)" id="Option_UnPin">
+                    <div class="menu__link">
+                        <svg size="16" class="icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-6 0 26 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.3333333,6 C11.3333333,8.94666667 8.94666667,11.3333333 6,11.3333333 C3.056,11.3333333 0.666666667,8.94666667 0.666666667,6 C0.666666667,3.05466667 3.056,0.666666667 6,0.666666667 C8.94666667,0.666666667 11.3333333,3.05466667 11.3333333,6 L11.3333333,6 Z"></path><line x1="6" y1="11.3333333" x2="6" y2="23.3333333"></line><path d="M6,3.33333333 C7.47333333,3.33333333 8.66666667,4.528 8.66666667,6"></path>
+                        </svg>
+                        <span class="comment__menu-name">Unpin</span>
+                    </div>
+                    <span class="comment__menu-help">Unpin this comment.</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed grey;"></div>
+
+            <div class="menu__option" style="padding: 1px 1px 1px 1px;">
+                <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_AddAsModerator(tempData,sdk)" id="Option_AddAsModerator">
+                    <div class="menu__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></g>
+                        </svg>
+                        <span class="comment__menu-name">Add as moderator</span>
+                    </div>
+                    <span class="comment__menu-help">Assign this user to moderate <br>your channel.</span>
+                </div>
+
+                <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_RemoveAsModerator(tempData,sdk)" id="Option_RemoveAsModerator">
+                    <div class="menu__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></g>
+                        </svg>
+                        <span class="comment__menu-name">Remove moderator</span>
+                    </div>
+                    <span class="comment__menu-help">Deny this user to moderate <br>your channel.</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed grey;"></div>
+
+            <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_Remove(tempData,sdk)" id="Option_Remove">
+                <div class="menu__link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></g>
+                    </svg>
+                    <span class="comment__menu-name">Remove</span>
+                </div>
+                <span class="comment__menu-help">Remove this comment.</span>
+            </div>
+
+            <div style="border-top: 1px dashed grey;"></div>
+
+            <div class="menu__option" style="padding: 1px 1px 1px 1px;">
+                <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_Block_Perm(tempData,sdk)" id="Option_Block">
+                    <div class="menu__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></g>
+                        </svg>
+                        <span class="comment__menu-name">Permanent Block</span>
+                    </div>
+                    <span class="comment__menu-help">Permanent ban.</span>
+                </div>
+                
+                <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_Block_Temp(tempData,sdk)" id="Option_TempBlock">
+                    <div class="menu__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></g>
+                        </svg>
+                        <span class="comment__menu-name">Temporary Block</span>
+                    </div>
+                    <span class="comment__menu-help">10 minute temporary ban.</span>
+                </div>
+
+                <div class="comment__menu-option" role="menuitem" tabindex="-1" onclick="Option_Block_Unban(tempData,sdk)" id="Option_UnBlock">
+                    <div class="menu__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" aria-hidden="true"><g><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></g>
+                        </svg>
+                        <span class="comment__menu-name">Unblock</span>
+                    </div>
+                    <span class="comment__menu-help">Unblock user.</span>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed grey;"></div>
+
+            <div class="comment__menu-option" style="padding: 1px 1px 1px 1px;">
+                <span class="comment__menu-name" style="left: 21px;">This feature requires LBRY App<br> or LBRYnet running.</span>
+                <br><span class="comment__menu-name" style="top: 2px; left: 20px;">Status: <span id="app_status" class="comment__menu-help" style="left: 0px;"></span></span>
+            </div>
+
+            <div class="comment__menu-active" style="margin-top: 10px;">
+                <div class="channel-thumbnail" onclick="toast_message()">
+                    <img id="thumbnail" class="channel-thumbnail__custom">
+                    <div id="interactor" class="comment__menu-channel"></div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>

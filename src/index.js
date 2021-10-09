@@ -10,13 +10,15 @@ const logger = require('./routes/log');
 const { Server } = require("socket.io");
 const io = new Server(server);
 const path = require('path');
-const { app, BrowserWindow, screen, Menu } = require('electron');
+const { app, BrowserWindow, screen, Menu, ipcRenderer, ipcMain } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const { is } = require('electron-util');
 const unhandled = require('electron-unhandled');
 const contextMenu = require('electron-context-menu');
 const Api = require('./routes/api')();
 const Alert = require('electron-alert');
+require('@electron/remote/main').initialize();
+const user = {};
 
 autoUpdater.setFeedURL({
 	provider: 'github',
@@ -61,10 +63,11 @@ io.on('connection', (socket) => {
 
 // Prevent window from being garbage collected
 let mainWindow;
+let win;
 
 const createMainWindow = async () => {
 	const {width,height} = screen.getPrimaryDisplay().workAreaSize
-	const win = new BrowserWindow({
+	win = new BrowserWindow({
 		title: app.name,
 		show: false,
 		width: width,
@@ -75,10 +78,12 @@ const createMainWindow = async () => {
 			enableRemoteModule: true
         }
 	});
+	require("@electron/remote/main").enable(win.webContents)
 
 	win.setMenu(null)
 
 	win.on('ready-to-show', () => {
+		win.setTitle(app.name)
 		win.show();
 	});
 
@@ -120,12 +125,10 @@ function connect(req, res) {
 	const body = { 
 		email_address: EmailAddress
 	}
-   	fetch(`https://www.odysee-chatter.com/api/getCredentials`, {
-		method: 'post',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(body)
+	fetch(`https://www.odysee-chatter.com/api/getCredentials`, {
+  		method: 'POST',
+  		headers: { 'Content-Type': 'application/json' },
+  		body: JSON.stringify(body)
 	})
 	.then(rez => rez.json())
 	.then(rez => {
@@ -133,34 +136,30 @@ function connect(req, res) {
 			console.log(rez.reason);
 		}
 		else if(rez.status == "SUCCESS"){
-			const user = {
-				nickname: req.oidc.user.nickname,
-				name: req.oidc.user.name,
-				picture: req.oidc.user.picture,
-				updated_at: req.oidc.user.updated_at,
-				email: req.oidc.user.email,
-				email_verified: req.oidc.user.email_verified,
-				sub: req.oidc.user.sub,
-				acr: req.oidc.user.acr,
-				amr: req.oidc.user.amr,
-				api_key: rez.api_key,
-				claim_id: rez.claim_id
-			}
 
-			if(rez.claim_id == "") {
-				/* GET noclaimid. */
+			user['nickname'] = `${req.oidc.user.nickname}`;
+			user['name'] = `${req.oidc.user.name}`;
+			user['picture'] = `${req.oidc.user.picture}`;
+			user['updated_at'] = `${req.oidc.user.updated_at}`;
+			user['email'] = `${req.oidc.user.email}`;
+			user['email_verified'] = `${req.oidc.user.email_verified}`;
+			user['sub'] = `${req.oidc.user.sub}`;
+			user['api_key'] = `${rez.api_key}`;
+			user['claim_id'] = `${rez.claim_id}`;
+			user['app_version'] = app.getVersion();
+
+			if(rez.claim_id === "") {
 				serverApp.get('/noclaimid', function (req, res, next) {
 					res.render('./noclaimid.html', {user: user})
 				});
 				mainWindow.loadURL(`${config_data.baseURL}/noclaimid`)
 			}
-			else {
-				/* GET user profile. */
-				serverApp.get('/user', function (req, res, next) {
-					res.render('./main.html', {user: user})
-				});
+			else if(rez.claim_id !== "") {
 				const Odysee = require('./routes/odysee')(EmailAddress, io);
 				mainWindow.loadURL(`${config_data.baseURL}/user`)
+				setTimeout(function() {
+					win.webContents.send('user_info', {user: user})
+				}, 1000)
 			}
 		}
 	})
@@ -171,6 +170,14 @@ serverApp.get('/', (req, res, next) => {
   	res.send(req.oidc.isAuthenticated() ? connect(req, res) : app.quit());
 });
 
+/* GET popup. */
+serverApp.get(`/popup`, function (req, res, next) {
+	res.render('./popup.html', { data: { name: req.query.name, id: req.query.id, comment_id: req.query.comment_id }})
+});
+/* GET user profile. */
+serverApp.get(`/user`, function (req, res, next) {
+	res.render('./main.html', {user: user})
+});
 /* GET chat. */
 serverApp.get('/chat', function (req, res, next) {
 	res.render('./chat.html')

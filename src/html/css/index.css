@@ -99,7 +99,7 @@ li.nav-item.stats {
 li.nav-item.settings {
 	margin-top: 4px;
 	position: absolute;
-	right: 45.75%;
+	right: 40%;
 }
 nav.navbar {
 	background-color: #241c30;
@@ -292,4 +292,222 @@ button#timer {
 	position: relative;
 	top: -50px;
 	right: -190px;
+}
+
+div.update_chat {
+	display: inline;
+	position: relative;
+	left: 25px;
+	top: -4px;
+	background-color: #241c30;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+	bottom: -16px;
+	color: white;
+}
+div.viewers {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	left: 0px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.followers {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.reaction_likes {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.reaction_dislikes {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.streamViews {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.currency {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+div.support_amount {
+	display: inline;
+	position: relative;
+	background-color: #241c30;
+	margin-left: 5px;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+}
+
+span#time {
+	margin-right: auto;
+	display: inline-block;
+	width: 80px;
+}
+button.menu__button {
+	background-color: transparent;
+	border: none;
+	border-radius: 15px;
+	color: grey;
+	position: relative;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+button.menu__button:hover {
+	background-color: #38274c;
+	border: none;
+	border-radius: 15px;
+	color: #d6d6d6;
+}
+button.menu__button:focus {
+	color: #d6d6d6;
+}
+svg.icon.icon--MoreVertical {
+	width: 18px;
+	height: 18px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+div.childcontainer {
+	background-color: transparent;
+	color: white;
+	position: relative;
+	margin: auto;
+	height: 74.77px;
+	width: auto;
+}
+div.superchats_wrapper {
+	width: 762.06px;
+	height: 74.77px;
+	background-color: #241c30;
+	color: white;
+	padding: 5px 10px 5px 10px;
+	border-radius: 15px;
+	border-bottom: 1px solid #30243d;
+	position: relative;
+	overflow-x: scroll;
+	font-size: 0.8571rem;
+	margin: auto;
+	padding-left: 25px;
+	padding-right: 25px;
+	margin-bottom: 10px;
+}
+div#livestream-superchats__inner.livestream-superchats__inner {
+	display: flex;
+	width: auto;
+	height: 46.78px;
+}
+div.livestream-superchat {
+	width: 120px;
+	min-width: 92.78px;
+	height: 46.78px;
+	background-color: #fcd34d;
+	margin-right: calc(2rem/4);
+	padding: calc(2rem/5);
+	border-radius: 10px;
+	display: flex;
+}
+
+div.livestream-superchat__thumbnail {
+	width: 40px;
+	height: 34px;
+	display: block;
+}
+div.channel-thumbnail {
+	width: 32px;
+	height: 32px;
+	border-radius: 10px;
+	margin-right: calc(2rem / 4);
+	background-size: cover;
+	display: flex;
+    position: relative;
+}
+div.ff-container {
+	width: 32px;
+	height: 32px;
+	width: 100%;
+}
+img.freezeframe-img {
+	width: 32px;
+	height: 32px;
+	border-radius: 10px;
+	transition-delay: 170ms;
+}
+div.channel-staked__wrapper {
+	width: 21.38;
+	height: 20.38;
+	padding: .2rem;
+    background-color: #181021;
+    border-radius: 50%;
+	display: flex;
+    position: absolute;
+    bottom: -0.75rem;
+	margin-left: -5px;
+}
+svg.channel-staked__indicator {
+	margin-left: 1px;
+	fill: #00eaff;
+	z-index: 3;
+}
+div.livestream-superchat__info {
+	width: auto;
+	height: 34px;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: var(--font-xsmall);
+}
+span.channel-name {
+	font-size: 12.5px;
+	color: black;
+}
+a.button button--no-style button--uri-indicator {
+	color: black;
+	width: auto;
+}
+span.livestream-superchat__amount {
+	width: 40px;
+	height: 17px;
+	font-size: 12.5px;
+	color: black;
+}
+
+.flex-direction {
+	flex-direction: row;
+}
+@media screen and (max-width: 1000px) {
+	.flex-direction{
+		flex-direction:column;
+		bottom: -30px;
+	}
+	.superchats_wrapper {
+		top: -30px;
+	}
 }

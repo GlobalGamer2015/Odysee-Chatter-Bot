@@ -14,7 +14,7 @@ module.exports = function() {
 				api_key: Api_Key
 			}
 	
-		   	fetch(`https://www.odysee-chatter.com/api/createComment`, {
+		   	fetch(`https://www.odysee-chatter.com/api/commentCreate`, {
 				method: 'post',
 				headers: {
 					'Content-Type': 'application/json',
@@ -22,12 +22,12 @@ module.exports = function() {
 				body: JSON.stringify(body)
 			})
 			.then(res => res.json())
-			.then(resJson => {
-				//console.log(resJson)
+			.then(res => {
+				console.log(res)
 			})
 		}
 		catch(error) {
-			logger.WriteError('api.js', error, `createComment Error: ${error}`);
+			logger.WriteError('api.js', error, `commentCreate Error: ${error}`);
 		}
 	}
 

@@ -19,7 +19,7 @@
 		<script src='http://localhost:4187/files/js/languages.js'></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	</head>
-	<body onload="version(), ReadMainPage_Language()">
+	<body onload="version(), ReadMainPage_Language(), OdyseeBackendStatus()">
 		<nav class="navbar">
 			<div class="navbar-collapse collapse">
 				<ul class="navbar-nav">
@@ -51,8 +51,12 @@
   		</nav>
 		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
 			<!-- Will be used in the future. -->
-			<div id="motd">
-				<!-- Message of the day. -->
+			<div id="server_status">
+				<h3>Server Status</h3>
+				<label>Odysee:</label> <span id="odysee_status"></span>
+				<br><label>Lbrynet:</label> <span id="lbrynet_status"></span>
+				<br><label>Odysee Chatter:</label> <span id="odyseechatter_status"></span>
+				<br><a onclick="OdyseeBackendStatus()"><label>Click me to check Status</label></a>
 			</div>
 
 			<div id="about">

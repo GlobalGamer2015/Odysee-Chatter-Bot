@@ -95,6 +95,11 @@ module.exports = function(EmailAddress, io) {
     		var currency = comment.data.comment.currency;
     		var is_fiat = comment.data.comment.is_fiat;
 
+			
+			io.emit('addTip', {
+				event: event
+			})
+
 			commands = require('./odysee_commands.js')(comment, claimid, Claim_Id, Api_Key);
 			chat_history = require('./odysee_chat_history.js')(event)
 			
@@ -122,7 +127,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'LBC',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 						else if(is_moderator == true) {
@@ -134,7 +140,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'LBC',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 						else {
@@ -146,7 +153,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'LBC',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 					}
@@ -168,7 +176,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'USD',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 						else if(is_moderator == true) {
@@ -180,7 +189,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'USD',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 						else {
@@ -192,7 +202,8 @@ module.exports = function(EmailAddress, io) {
 								alert: 'tip',
 								tip_currency: 'USD',
 								tip: support_amount,
-								message: msg
+								message: msg,
+								comment_id: msg_id
 							})
 						}
 					}
@@ -208,7 +219,8 @@ module.exports = function(EmailAddress, io) {
 						user: 'streamer',
 						username: channel_name,
 						channel: channel_url,
-						message: msg
+						message: msg,
+						comment_id: msg_id
 					});
 				}
 				else if(is_moderator == true) {
@@ -218,7 +230,8 @@ module.exports = function(EmailAddress, io) {
 						user: 'moderator',
 						username: channel_name,
 						channel: channel_url,
-						message: msg
+						message: msg,
+						comment_id: msg_id
 					});
 				}
 				else {
@@ -228,7 +241,8 @@ module.exports = function(EmailAddress, io) {
 						user: 'user',
 						username: channel_name,
 						channel: channel_url,
-						message: msg
+						message: msg,
+						comment_id: msg_id
 					});
 				}
 			})

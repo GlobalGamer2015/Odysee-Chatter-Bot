@@ -1,0 +1,49 @@
+body {
+    background-color: grey !important;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+div.menu__list {
+    background-color: #30243d !important;
+    padding: 10px 10px 10px 10px;
+    width: 250px;
+    height: 535px;
+}
+div.comment__menu-title {
+    color: grey;
+}
+div.comment__menu-option {
+    color: #f3f4f6;
+    margin-bottom: 5px;
+}
+div.channel-thumbnail {
+    display: inline;
+}
+img#thumbnail.channel-thumbnail__custom {
+    float: left;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+}
+div.comment__menu-channel {
+    color: grey;
+    position: relative;
+    left: 3px;
+    top: 4px;
+}
+span.comment__menu-help {
+    word-wrap: break-word;
+    position: relative;
+    left: 22px;
+    color: #bbbbbb;
+}
+span.comment__menu-name {
+    position: relative;
+    left: 2.5px;
+}
+svg.icon {
+    position: relative;
+    top: 5px;
+    color: grey;
+}
