@@ -22,107 +22,102 @@ module.exports = function(event) {
     var is_pinned = data.data.comment.is_pinned;
     var is_fiat = data.data.comment.is_fiat;
 
-    if(channel_name == "@Odysee-Chatter-Bot") {
-
-    }
-    else {
-        try {
-            fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, 'utf8', function(err,data) {
-                if(err) {
-                    Alert.ShowErrorMessage(err)
-                }
-                chatObject = JSON.parse(data);
+    try {
+        fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, 'utf8', function(err,data) {
+            if(err) {
+                Alert.ShowErrorMessage(err)
+            }
+            chatObject = JSON.parse(data);
         
-                if(is_creator == true) {
-                    chatObject.messages.push(
-                        {
-                            "comment": `${comment}`,
-                            "comment_id": `${comment_id}`,
-                            "claim_id": `${claim_id}`,
-                            "timestamp": `${timestamp}`,
-                            "signature": `${signature}`,
-                            "signature_ts": `${signing_ts}`,
-                            "channel_id": `${channel_id}`,
-                            "channel_name": `${channel_name}`,
-                            "channel_url": `${channel_url}`,
-                            "currency": `${currency}`,
-                            "support_amount": support_amount,
-                            "is_creator": is_creator,
-                            "is_hidden": is_hidden,
-                            "is_pinned": is_pinned,
-                            "is_fiat": is_fiat
-                        }
-                    );
+            if(is_creator == true) {
+                chatObject.messages.push(
+                    {
+                        "comment": `${comment}`,
+                        "comment_id": `${comment_id}`,
+                        "claim_id": `${claim_id}`,
+                        "timestamp": `${timestamp}`,
+                        "signature": `${signature}`,
+                        "signature_ts": `${signing_ts}`,
+                        "channel_id": `${channel_id}`,
+                        "channel_name": `${channel_name}`,
+                        "channel_url": `${channel_url}`,
+                        "currency": `${currency}`,
+                        "support_amount": support_amount,
+                        "is_creator": is_creator,
+                        "is_hidden": is_hidden,
+                        "is_pinned": is_pinned,
+                        "is_fiat": is_fiat
+                    }
+                );
 
-                    json = JSON.stringify(chatObject, null, 4)
+                json = JSON.stringify(chatObject, null, 4)
 
-                    fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
-                        if(err) {
-                            Alert.ShowErrorMessage(err)
-                        }
-                    })
-                }
-                else if(is_moderator == true) {
-                    chatObject.messages.push(
-                        {
-                            "comment": `${comment}`,
-                            "comment_id": `${comment_id}`,
-                            "claim_id": `${claim_id}`,
-                            "timestamp": `${timestamp}`,
-                            "signature": `${signature}`,
-                            "signature_ts": `${signing_ts}`,
-                            "channel_id": `${channel_id}`,
-                            "channel_name": `${channel_name}`,
-                            "channel_url": `${channel_url}`,
-                            "currency": `${currency}`,
-                            "support_amount": support_amount,
-                            "is_moderator": is_moderator,
-                            "is_hidden": is_hidden,
-                            "is_pinned": is_pinned,
-                            "is_fiat": is_fiat
-                        }
-                    );
+                fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
+                    if(err) {
+                        Alert.ShowErrorMessage(err)
+                    }
+                })
+            }
+            else if(is_moderator == true) {
+                chatObject.messages.push(
+                    {
+                        "comment": `${comment}`,
+                        "comment_id": `${comment_id}`,
+                        "claim_id": `${claim_id}`,
+                        "timestamp": `${timestamp}`,
+                        "signature": `${signature}`,
+                        "signature_ts": `${signing_ts}`,
+                        "channel_id": `${channel_id}`,
+                        "channel_name": `${channel_name}`,
+                        "channel_url": `${channel_url}`,
+                        "currency": `${currency}`,
+                        "support_amount": support_amount,
+                        "is_moderator": is_moderator,
+                        "is_hidden": is_hidden,
+                        "is_pinned": is_pinned,
+                        "is_fiat": is_fiat
+                    }
+                );
 
-                    json = JSON.stringify(chatObject, null, 4)
+                json = JSON.stringify(chatObject, null, 4)
 
-                    fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
-                        if(err) {
-                            Alert.ShowErrorMessage(err)
-                        }
-                    })
-                }
-                else {
-                    chatObject.messages.push(
-                        {
-                            "comment": `${comment}`,
-                            "comment_id": `${comment_id}`,
-                            "claim_id": `${claim_id}`,
-                            "timestamp": `${timestamp}`,
-                            "signature": `${signature}`,
-                            "signature_ts": `${signing_ts}`,
-                            "channel_id": `${channel_id}`,
-                            "channel_name": `${channel_name}`,
-                            "channel_url": `${channel_url}`,
-                            "currency": `${currency}`,
-                            "support_amount": support_amount,
-                            "is_hidden": is_hidden,
-                            "is_pinned": is_pinned,
-                            "is_fiat": is_fiat
-                        }
-                    );
+                fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
+                    if(err) {
+                        Alert.ShowErrorMessage(err)
+                    }
+                })
+            }
+            else {
+                chatObject.messages.push(
+                    {
+                        "comment": `${comment}`,
+                        "comment_id": `${comment_id}`,
+                        "claim_id": `${claim_id}`,
+                        "timestamp": `${timestamp}`,
+                        "signature": `${signature}`,
+                        "signature_ts": `${signing_ts}`,
+                        "channel_id": `${channel_id}`,
+                        "channel_name": `${channel_name}`,
+                        "channel_url": `${channel_url}`,
+                        "currency": `${currency}`,
+                        "support_amount": support_amount,
+                        "is_hidden": is_hidden,
+                        "is_pinned": is_pinned,
+                        "is_fiat": is_fiat
+                    }
+                );
 
-                    json = JSON.stringify(chatObject, null, 4)
+                json = JSON.stringify(chatObject, null, 4)
 
-                    fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
-                        if(err) {
-                            Alert.ShowErrorMessage(err)
-                        }
-                    })
-                }
-            })
-        }
-        catch(e) {
-            Alert.ShowErrorMessage(e)
-        }
+                fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`, json, function(err) {
+                    if(err) {
+                        Alert.ShowErrorMessage(err)
+                    }
+                })
+            }
+        })
+    }
+    catch(e) {
+        Alert.ShowErrorMessage(e)
     }
 }
