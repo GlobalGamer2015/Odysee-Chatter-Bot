@@ -80,9 +80,18 @@
 					}
 				}
 			})
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const chat = document.getElementById("input-chat");
+				chat.addEventListener("keyup", function(event) {
+					if(event.key === "Enter") {
+						SendMessageFromChat(chat)
+					}
+				})
+			})
         </script>
 	</head>
-	<body onload="readChatHistory(), ReadChatPage_Language(), Reaction(), SubCount(), Viewers(), StreamViews(), SuperChat()">
+	<body onload="readChatHistory(), ReadChatPage_Language(), Reaction(), SubCount(), Viewers(), StreamViews(), SuperChat(), Chat_Interacter()">
         <nav class="navbar">
 			<div class="navbar-collapse collapse">
 				<ul class="navbar-nav">
@@ -143,9 +152,15 @@
 			</div>
 		</div>
 		
-		<div style="background-color: transparent;">
+		<div style="background-color: transparent; overflow: hidden;">
 			<div id="update_chat" class="update_chat">
 				<label onclick="UpdateChat()">Update Chat</label>
+			</div>
+			<div class="input-group">
+				<div class="chat">
+					<input id="input-chat" class="input-chat form-control input-lg" type="text" value="Send message here." onfocus="if(this.value == 'Send message here.' || 'Message needs to be more than 1 character.'){this.value = '';}" maxlength="300" minlength="1">
+					<label id="input-chat-send" class="input-chat-send" onclick="const chat = document.getElementById('input-chat'); SendMessageFromChat(chat)">Send</label>
+				</div>
 			</div>
 		</div>
 

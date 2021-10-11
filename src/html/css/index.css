@@ -298,13 +298,39 @@ div.update_chat {
 	display: inline;
 	position: relative;
 	left: 25px;
-	top: -4px;
+	top: 0px;
 	background-color: #241c30;
 	padding: 10px 10px 10px 10px;
 	border-radius: 15px;
 	bottom: -16px;
 	color: white;
+	width: auto;
+	float:left;
 }
+
+div.chat {
+	float:left;
+	position: relative;
+	left: 27.5px;
+}
+input.input-chat.form-control.input-lg {
+	top: 0px;
+	width: 500px;
+	height: 46px;
+	border-radius: 15px;
+	background-color: #241c30;
+	color: white;
+	border: none;
+}
+label.input-chat-send {
+	background-color: #241c30;
+	padding: 10px 10px 10px 10px;
+	border-radius: 15px;
+	color: white;
+	border: none;
+	height: 46px;
+}
+
 div.viewers {
 	display: inline;
 	position: relative;

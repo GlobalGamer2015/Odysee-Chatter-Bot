@@ -1203,3 +1203,113 @@ function UpdateChat() {
         })
     })
 }
+
+function Chat_Interacter() {
+    const chat = document.getElementById("input-chat")
+    const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
+
+    Lbry.status()
+    .then(status => {
+        if(status.is_running === true) {
+            // LBRY App or LBRYnet is active.
+            chat.value = "Send message here.";
+        }
+    }).
+    catch(e => {
+        if(e.code === "ECONNREFUSED") {
+            // LBRY App or LBRYnet is not active.
+            chat.value = "SDK is not detected.";
+            chat.style.pointerEvents = "none";
+            document.getElementById('input-chat-send').style.pointerEvents = "none";
+        }
+    })
+    
+    setInterval(function() {
+        Lbry.status()
+        .then(status => {
+            if(status.is_running === true) {
+                // LBRY App or LBRYnet is active.
+                chat.value = "Send message here.";
+                chat.style.pointerEvents = "all";
+                document.getElementById('input-chat-send').style.pointerEvents = "all";
+            }
+        }).
+        catch(e => {
+            if(e.code === "ECONNREFUSED") {
+                // LBRY App or LBRYnet is not active.
+                chat.value = "SDK is not detected.";
+                chat.style.pointerEvents = "none";
+                document.getElementById('input-chat-send').style.pointerEvents = "none";
+            }
+        })
+    }, 10000)
+}
+function toHex(str) {
+    let s = unescape(encodeURIComponent(str));
+    let result = '';
+    for (let i = 0; i < s.length; i++) {
+      result += s.charCodeAt(i).toString(16).padStart(2, '0');
+    }
+  
+    return result;
+}
+function SendMessageFromChat(chat) {
+    if(chat.value.length >= 1) {
+        const fetch = require('node-fetch')
+        const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
+        const body = { 
+            api_key: window.localStorage.getItem('api_key')
+        }
+        fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(channel => {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+                method: 'get',
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+            })
+            .then(res => res.json())
+            .then(stream => {
+                Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(chat.value)}) // Your Bot Channel ID
+	            .catch((e) => {
+		            console.log(e)
+	            })
+	            .then(signed => {
+                    fetch(`https://comments.odysee.com/api/v2?m=comment.Create`, {
+			            method: 'post',
+			            headers: {
+				            'Content-Type': 'application/json'
+			            },
+			            body: `{
+				            "jsonrpc":"2.0",
+				            "id":1,
+				            "method":"comment.Create",
+				            "params":{
+					            "channel_id":"${window.localStorage.getItem('claim_id')}",
+					            "channel_name":"${channel.channel.items[0].name}",
+					            "claim_id":"${stream.data[0].claim_id}",
+					            "comment":"${chat.value}",
+					            "signature": "${signed.signature}",
+					            "signing_ts": "${signed.signing_ts}"
+				            }
+			            }`
+		            })
+		            .then(res => res.json())
+		            .then(res => {
+			            if(res.result) {
+                            chat.value = "";
+                        }
+		            })
+                })
+            })
+        })
+    }
+    else {
+        chat.value = "Message needs to be more than 1 character.";
+    }
+}
