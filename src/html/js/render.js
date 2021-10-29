@@ -506,6 +506,7 @@ function removeComment(delete_comment_id) {
     }
 }
 function getStickerImage(sticker) {
+    // Free
     if(sticker === ":CAT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/CAT/PNG/cat_with_border.png'></img>"};
     if(sticker === ":FAIL:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/FAIL/PNG/fail_with_border.png'></img>"}
     if(sticker === ":HYPE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/HYPE/PNG/hype_with_border.png'></img>"}
@@ -531,6 +532,27 @@ function getStickerImage(sticker) {
     if(sticker === ":SPAGHETTI_BATH:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png'></img>"}
     if(sticker === ":THUG_LIFE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/THUG%20LIFE/PNG/thug_life_with_border_clean.png'></img>"}
     if(sticker === ":WHUUT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/WHUUT/PNG/whuut_with-frame.png'></img>"}
+
+    // Paid
+    if(sticker === ":TIP_HAND_FLIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/tip_hand_flip_$%20_with_border.png'></img>"}
+    if(sticker === ":TIP_HAND_FLIP_COIN:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/tip_hand_flip_coin_with_border.png'></img>"}
+    if(sticker === ":TIP_HAND_FLIP_LBC:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/tip_hand_flip_lbc_with_border.png'></img>"}
+    if(sticker === ":COMET_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/$%20comet%20tip%20with%20border.png'></img>"}
+    if(sticker === ":LBC_COMET_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/LBC%20comet%20tip%20with%20border.png'></img>"}
+    if(sticker === ":SMALL_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20bordersmall$_tip.png'></img>"}
+    if(sticker === ":SILVER_ODYSEE_COIN:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20bordersilver_odysee_coinv.png'></img>"}
+    if(sticker === ":SMALL_LBC_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20bordersmall_LBC_tip%20.png'></img>"}
+    if(sticker === ":BITE_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/bite_$tip_with%20border.png'></img>"}
+    if(sticker === ":BITE_TIP_CLOSEUP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/bite_$tip_closeup.png'></img>"}
+    if(sticker === ":BITE_LBC_CLOSEUP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/LBC%20bite.png'></img>"}
+    if(sticker === ":MEDIUM_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20bordermedium$_%20tip.png'></img>"}
+    if(sticker === ":MEDIUM_LBC_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20bordermedium_LBC_tip%20%20%20%20%20%20%20%20%20%20.png'></img>"}
+    if(sticker === ":LARGE_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderlarge$tip.png'></img>"}
+    if(sticker === ":LARGE_LBC_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderlarge_LBC_tip%20.png'></img>"}
+    if(sticker === ":BIG_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderbig$tip.png'></img>"}
+    if(sticker === ":BIG_LBC_TIP:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/big_LBC_TIPV.png'></img>"}
+    if(sticker === ":FORTUNE_CHEST:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderfortunechest$_tip.png'></img>"}
+    if(sticker === ":FORTUNE_CHEST_LBC:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderfortunechest_LBC_tip.png'></img>"}
 }
 
 function readChatHistory() {
