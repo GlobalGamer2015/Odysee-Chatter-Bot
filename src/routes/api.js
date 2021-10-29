@@ -5,10 +5,19 @@ const logger = require('./log');
 
 module.exports = function() {
 
+	function replacePartOfMessage(comment) {
+		if(comment.includes('"')) {
+			return comment.replace(/"/g, "'");
+		}
+		else {
+			return comment;
+		}
+	}
+
 	function createComment(comment, stream_claimid, user_claimid, Api_Key) {
 		try {
 			const body = { 
-				comment: comment,
+				comment: replacePartOfMessage(comment),
 				stream_claim_id: stream_claimid,
 				user_claim_id: user_claimid,
 				api_key: Api_Key

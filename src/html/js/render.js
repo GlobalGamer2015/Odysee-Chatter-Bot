@@ -278,8 +278,8 @@ function readCommands() {
                             `<div style="text-align: left;" id="${CommandName}_start">
                                 <form id="${CommandName}" onsubmit="JavaScript:updateCommand(event)">
                                     <b>Command: ${CommandName}</b>
-                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value="${CommandName}">
-                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value="${CommandReply}">
+                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value='${CommandName}'>
+                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value='${CommandReply}'>
                                     <br><label>Enabled &nbsp; </label><input id="${CommandName}_Active" type="checkbox" checked>
                                     <button class="${CommandSelectSplit0}" id="${CommandName}" type="submit">Update</button>
                                 </form>
@@ -290,8 +290,8 @@ function readCommands() {
                             `<div style="text-align: left;" id="${CommandName}_start">
                                 <form id="${CommandName}" onsubmit="JavaScript:updateCommand(event)">
                                     <b>Command: ${CommandName}</b>
-                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value="${CommandName}">
-                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value="${CommandReply}">
+                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value='${CommandName}'>
+                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value='${CommandReply}'>
                                     <br><label>Enabled &nbsp; </label><input id="${CommandName}_Active" type="checkbox">
                                     <button class="${CommandSelectSplit0}" id="${CommandName}" type="submit">Update</button>
                                 </form>
