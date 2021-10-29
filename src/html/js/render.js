@@ -305,9 +305,9 @@ function readCommands() {
                             `<div style="text-align: left;" id="${CommandName}_start">
                                 <form id="${CommandName}" onsubmit="JavaScript:updateCommand(event)">
                                     <b>Timer: ${CommandName}</b>
-                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value="${CommandName}">
-                                    <br><label>Every &nbsp;</label><input class="Command" id="${CommandName}_Time" type="number" value="${CommandTimer}" min="1" max="999" style="width: 50px;"><label> &nbsp; minutes.</label>
-                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value="${CommandReply}">
+                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value='${CommandName}'>
+                                    <br><label>Every &nbsp;</label><input class="Command" id="${CommandName}_Time" type="number" value='${CommandTimer}' min="1" max="999" style="width: 50px;"><label> &nbsp; minutes.</label>
+                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value='${CommandReply}'>
                                     <br><label>Enabled &nbsp; </label><input id="${CommandName}_Active" type="checkbox" checked>
                                     <button class="${CommandSelectSplit0}" id="${CommandName}" type="submit">Update</button>
                                 </form>
@@ -318,9 +318,9 @@ function readCommands() {
                             `<div style="text-align: left;" id="${CommandName}_start">
                                 <form id="${CommandName}" onsubmit="JavaScript:updateCommand(event)">
                                     <b>Timer: ${CommandName}</b>
-                                    <br><label>Every &nbsp;</label><input class="Command" id="${CommandName}_Time" type="number" value="${CommandTimer}" min="1" max="999" style="width: 50px;"><label> &nbsp; minutes.</label>
-                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value="${CommandName}">
-                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value="${CommandReply}">
+                                    <br><label>Every &nbsp;</label><input class="Command" id="${CommandName}_Time" type="number" value='${CommandTimer}' min="1" max="999" style="width: 50px;"><label> &nbsp; minutes.</label>
+                                    <br><label>Command: &nbsp; </label><input class="Command" id="${CommandName}_Name" type="text" value='${CommandName}'>
+                                    <br><label>Reply: &nbsp; </label><input class="Command" id="${CommandName}_Reply" type="text" value='${CommandReply}'>
                                     <br><label>Enabled &nbsp; </label><input id="${CommandName}_Active" type="checkbox">
                                     <button class="${CommandSelectSplit0}" id="${CommandName}" type="submit">Update</button>
                                 </form>
@@ -505,6 +505,33 @@ function removeComment(delete_comment_id) {
         });
     }
 }
+function getStickerImage(sticker) {
+    if(sticker === ":CAT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/CAT/PNG/cat_with_border.png'></img>"};
+    if(sticker === ":FAIL:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/FAIL/PNG/fail_with_border.png'></img>"}
+    if(sticker === ":HYPE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/HYPE/PNG/hype_with_border.png'></img>"}
+    if(sticker === ":PANTS_1:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/PANTS/PNG/PANTS_1_with_frame.png'></img>"}
+    if(sticker === ":PANTS_2:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/PANTS/PNG/PANTS_2_with_frame.png'></img>"}
+    if(sticker === ":PISS:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/PISS/PNG/piss_with_frame.png'></img>"}
+    if(sticker === ":PREGNANT_MAN_ASIA:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20man/png/Pregnant%20man_white%20border_asia.png'></img>"}
+    if(sticker === ":PREGNANT_MAN_BLACK_HAIR:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20man/png/Pregnant%20man_white%20border_black%20hair.png'></img>"}
+    if(sticker === ":PREGNANT_MAN_BLACK_SKIN:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20man/png/Pregnant%20man_white%20border_black%20skin.png'></img>"}
+    if(sticker === ":PREGNANT_MAN_BLONDE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20man/png/Pregnant%20man_white%20border_blondie.png'></img>"}
+    if(sticker === ":PREGNANT_MAN_RED_HAIR:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20man/png/Pregnant%20man_white%20border_red%20hair%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_BLACK_HAIR_GREEN_SHIRT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_black%20hair%20green%20shirt.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_BLACK_HAIR:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_black%20hair.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_BLACK_SKIN:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_black%20woman.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_BLONDE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_blondie.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_BROWN_HAIR:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_brown%20hair.png'></img>"}
+    if(sticker === ":PREGNANT_WOMAN_RED_HAIR:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/pregnant%20woman/png/Pregnant%20woman_white_border_red%20hair%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20.png'></img>"}
+    if(sticker === ":ROCKET_SPACEMAN:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/ROCKET%20SPACEMAN/PNG/rocket-spaceman_with-border.png'></img>"}
+    if(sticker === ":SALTY:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SALTY/PNG/salty.png'></img>"}
+    if(sticker === ":SICK_FLAME:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SICK/PNG/sick2_with_border.png'></img>"}
+    if(sticker === ":SICK_SKULL:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SICK/PNG/with%20borderdark%20with%20frame.png'></img>"}
+    if(sticker === ":SLIME:") {return "<img src'https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SLIME/PNG/slime_with_frame.png'></img>"}
+    if(sticker === ":SPAGHETTI_BATH:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png'></img>"}
+    if(sticker === ":THUG_LIFE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/THUG%20LIFE/PNG/thug_life_with_border_clean.png'></img>"}
+    if(sticker === ":WHUUT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/WHUUT/PNG/whuut_with-frame.png'></img>"}
+}
 
 function readChatHistory() {
     const fs = require('fs');
@@ -657,15 +684,31 @@ function readChatHistory() {
 				        const creator_tools_button_image = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon--MoreVertical" aria-hidden="true"><g><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></g></svg>';
                         const streamer_image = `<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15" height="15" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>`;
 
-                        if(channel_name === streamer){
-                            messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
+                        if(comment.startsWith("<stkr>")) {
+                            const sticker = comment.replace("<stkr>", "").replace("<stkr>", "");
+                            
+                            if(channel_name === streamer){
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                            }
+                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                            //else if(event.user == "moderator"){
+                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${getStickerImage(sticker)}</div>`;
+                            //}
+                            else if(channel_name !== streamer) {
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                            }
                         }
-                        // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
-                        //else if(event.user == "moderator"){
-                        //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
-                        //}
-                        else if(channel_name !== streamer) {
-                            messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
+                        else {
+                            if(channel_name === streamer){
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
+                            }
+                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                            //else if(event.user == "moderator"){
+                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
+                            //}
+                            else if(channel_name !== streamer) {
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
+                            }
                         }
 
                         // Check if is there and remove
@@ -1181,15 +1224,31 @@ function UpdateChat() {
 				        const creator_tools_button_image = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon--MoreVertical" aria-hidden="true"><g><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></g></svg>';
                         const streamer_image = `<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15" height="15" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>`;
 
-                        if(channel_name === streamer){
-                            messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
+                        if(comment.startsWith("<stkr>")) {
+                            const sticker = comment.replace("<stkr>", "").replace("<stkr>", "");
+                            
+                            if(channel_name === streamer){
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                            }
+                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                            //else if(event.user == "moderator"){
+                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${getStickerImage(sticker)}</div>`;
+                            //}
+                            else if(channel_name !== streamer) {
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                            }
                         }
-                        // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
-                        //else if(event.user == "moderator"){
-                        //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
-                        //}
-                        else if(channel_name !== streamer) {
-                            messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
+                        else {
+                            if(channel_name === streamer){
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
+                            }
+                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                            //else if(event.user == "moderator"){
+                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
+                            //}
+                            else if(channel_name !== streamer) {
+                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
+                            }
                         }
 
                         // Check if is there and remove
