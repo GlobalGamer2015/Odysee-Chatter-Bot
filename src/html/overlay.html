@@ -76,10 +76,10 @@
             const sticker = event.message.replace('<stkr>', '').replace('<stkr>', '');
             document.getElementById('overlay').innerHTML += `<div id="overlay-sticker" style="position: fixed; left: ${getStickerRange(10, 80)}%; top: ${getStickerRange(10, 80)}%; overflow: hidden; z-index: 3;">${getStickerImage(sticker)}</div>`;
 
-            /*setTimeout(() => {
+            setTimeout(() => {
               const sticker = document.getElementById('overlay-sticker');
               sticker.remove();
-            }, 15000);*/
+            }, 15000);
           }
           else {
             document.getElementById('overlay').innerHTML += `
@@ -93,10 +93,10 @@
               </div>
             </div>`;
 
-            /*setTimeout(() => {
+            setTimeout(() => {
               const overlaychat = document.getElementById('overlay-chat');
               overlaychat.remove();
-            }, 30000);*/
+            }, 30000);
           }
         })
       })
