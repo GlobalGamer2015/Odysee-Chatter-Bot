@@ -22,7 +22,7 @@ function getStickerImage(sticker) {
     if(sticker === ":SICK_FLAME:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SICK/PNG/sick2_with_border.png'></img>"}
     if(sticker === ":SICK_SKULL:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SICK/PNG/with%20borderdark%20with%20frame.png'></img>"}
     if(sticker === ":SLIME:") {return "<img src'https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SLIME/PNG/slime_with_frame.png'></img>"}
-    if(sticker === ":SPAGHETTI_BATH:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png'></img>"}
+    if(sticker === ":SPHAGETTI_BATH:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png'></img>"}
     if(sticker === ":THUG_LIFE:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/THUG%20LIFE/PNG/thug_life_with_border_clean.png'></img>"}
     if(sticker === ":WHUUT:") {return "<img src='https://thumbnails.odysee.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/WHUUT/PNG/whuut_with-frame.png'></img>"}
 
