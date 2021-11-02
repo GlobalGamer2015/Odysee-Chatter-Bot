@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot Overlay</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src='http://localhost:4187/files/js/stickers.js'></script>
+    <script src="http://localhost:4187/files/socket.io/socket.io.js"></script>
+    <style>
+      .overlay-wrapper {
+        height: 100%;
+        width: 100%;
+      }
+
+      .overlay {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .overlay-chat {
+        padding: 2.5px 20px 2.5px 2.5px;
+      }
+
+      .overlay-chat-body {
+        background-color: #241c30;
+        color: white;
+        word-wrap: break-word;
+        display: flex;
+        border-radius: 15px;
+        bottom: 0;
+        padding: 5px 5px 5px 5px;
+      }
+
+      .overlay-chat-info {
+        padding: 10px 10px 10px 10px;
+        display: inline-flex;
+      }
+
+      .overlay-chat-author {
+        display: inline-flex;
+        padding-left: 5px;
+      }
+
+      .overlay-chat-text {
+        display: inline-flex;
+        padding-left: 5px;
+      }
+    </style>
+    <script>
+      $(document).ready(function() {
+        const socket = io("http://localhost:4187");
+        socket.on('addComment', (event) => {
+          //console.log(event)
+          
+          function Badge() {
+            if (event.user === "streamer") {
+              return '<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>';
+            }
+            //if (event.user === "moderator") {
+            //  return '<svg size="16" class="icon icon--BadgeMod" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24" xml:space="preserve"><style type="text/css">.st0{fill:FF3850}.st1{fill:#181021}.st2{fill:#FFFFFF}</style><g><g><path class="st0" d="M11.69,6.77c4.86,0,7.55,0.9,8.52,1.31c1.29-1.46,3.28-4.14,3.28-6.76c0,0-4.17,4.86-6.92,5.12 c-1.25-0.87-2.77-1.38-4.41-1.38c0,0-3.21-0.06-4.63,1.31C4.81,6.44,0.51,1.32,0.51,1.32c0,2.61,1.97,5.27,3.25,6.74 C4.71,7.59,7.03,6.77,11.69,6.77z M19.87,19.38c0.02-0.13,0.04-0.27,0.04-0.4V12.8c0-1.03-0.21-2.02-0.58-2.92 c-0.83-0.33-3.25-1.11-7.64-1.11c-4.29,0-6.33,0.75-7,1.06c-0.38,0.91-0.6,1.91-0.6,2.97v6.18c0,0.13,0.02,0.26,0.04,0.39 C1.6,19.73,0,22.54,0,22.54L12,24l12-1.46C24,22.54,22.36,19.79,19.87,19.38z"></path></g></g><path class="st1" d="M13,18.57H11c-2.27,0-4.12-0.82-4.12-2.88v-2.46c0-2.77,2.17-3.94,5.11-3.94s5.11,1.17,5.11,3.94v2.46 C17.11,17.75,15.27,18.57,13,18.57z"></path><path class="st2" d="M15.06,15.25c-0.28,0-0.5-0.22-0.5-0.5v-1.42c0-0.32,0-1.31-1.63-1.31c-0.28,0-0.5-0.22-0.5-0.5 s0.22-0.5,0.5-0.5c1.65,0,2.63,0.86,2.63,2.31v1.42C15.56,15.02,15.33,15.25,15.06,15.25z"></path></svg>';
+            //}
+            else {
+              return '';
+            }
+          }
+
+          function getStickerRange(left, top) {
+            return Math.floor(Math.random() * (top - left + 1)) + left;
+          }
+
+          if (event.message.startsWith('<stkr>')) {
+            const sticker = event.message.replace('<stkr>', '').replace('<stkr>', '');
+            document.getElementById('overlay').innerHTML += `<div id="overlay-sticker" style="position: fixed; left: ${getStickerRange(10, 80)}%; top: ${getStickerRange(10, 80)}%; overflow: hidden; z-index: 3;">${getStickerImage(sticker)}</div>`;
+
+            /*setTimeout(() => {
+              const sticker = document.getElementById('overlay-sticker');
+              sticker.remove();
+            }, 15000);*/
+          }
+          else {
+            document.getElementById('overlay').innerHTML += `
+            <div id="overlay-chat" class="overlay-chat" style="padding: 2.5px 2.5px 2.5px 2.5px; width: 25%;">
+              <div class="overlay-chat-body" style="background-color: #241c30; color: white; word-wrap: break-word; display: flex; border-radius: 15px; bottom: 0; padding: 5px 5px 5px 5px;">
+                <div class="overlay-chat-info" style="padding: 10px 10px 10px 10px; display: inline-flex; position: relative;">
+                  <span class="overlay-chat-author-badge" style="display: inline-flex; position: relative; align-items: center;">${Badge()}</span>
+                  <span class="overlay-chat-author" style="padding-left: 5px; display: inline-flex; position: relative; align-items: center;">${event.username}</span>
+                  <div class="overlay-chat-text" style="display: inline-flex; padding-left: 7.5px; align-items: center;">${event.message}</div>
+                </div>
+              </div>
+            </div>`;
+
+            /*setTimeout(() => {
+              const overlaychat = document.getElementById('overlay-chat');
+              overlaychat.remove();
+            }, 30000);*/
+          }
+        })
+      })
+    </script>
+	</head>
+	<body style="background-color: transparent;">
+		<div class="overlay-wrapper">
+      <div id="overlay" class="overlay">
+
+      </div>
+		</div>
+	</body>
+</html>

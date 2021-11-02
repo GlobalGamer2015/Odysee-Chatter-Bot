@@ -51,7 +51,7 @@
   		</nav>
 		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
 			<!-- Will be used in the future. -->
-			<div id="server_status">
+			<div id="server_status" style="width: 50%;">
 				<h3>Server Status</h3>
 				<label>Odysee:</label> <span id="odysee_status"></span>
 				<br><label>Lbrynet:</label> <span id="lbrynet_status"></span>
@@ -59,14 +59,14 @@
 				<br><a onclick="OdyseeBackendStatus()"><label>Click me to check Status</label></a>
 			</div>
 
-			<div id="about">
+			<div id="about" style="width: 50%;">
 				<h3 id="h3-about">About</h3>
 				<label id="label-version">Version:</label> <span id="version"></span>
 				<br><label id="report-issues">Report issues:</label> <a href="https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/issues/new?assignees=GlobalGamer2015&labels=bug&template=bug_report.md&title=">Github</a>
 				<br><label id="suggest-features">Suggest features:</label> <a href="https://github.com/GlobalGamer2015/Odysee-Chatter-Bot/issues/new?assignees=GlobalGamer2015&labels=enhancement&template=feature_request.md&title=">Github</a>
 			</div>
 
-			<div>
+			<div style="width: 50%;">
 				<h3 id="h3-useful-resources">Useful resources:</h3>
 				<label id="livestream-settings">Odysee Livestream Settings:</label> <a href="https://odysee.com/$/livestream" target="_blank">URL</a>
 				<br><label>LBRYLytics:</label> <a href="https://www.lbrylytics.com" target="_blank">URL</a>
@@ -78,8 +78,16 @@
 				<br><label>Odysee Notification Live Bot</label> <a href="https://odysee-chatter.com/odysee_live_bot" target="_blank">URL</a>
 				<br><label>Odysee Stream Deck Plugin</label> <a href="https://github.com/GlobalGamer2015/Odysee-Stream-Deck-Plugin/releases" target="_blank">URL</a>
 			</div>
+			
+			<div id="overlay">
+				<h3>Overlay</h3>
+				<label>URL:</label> <input type="text" placeholder="http://localhost:4187/overlay" readonly>
+				<br>Copy and paste this URL in a SL/OBS Browser Source URL.
+				<br>Recommend using width and height that is the same as your screen resolution.
+			</div>
 
 			<div id="do">
+				<br>
 				<a href="https://m.do.co/c/2b5167b5ded1">
                     <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/PoweredByDO/DO_Powered_by_Badge_blue.svg">
                 </a>

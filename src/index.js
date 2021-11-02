@@ -200,6 +200,11 @@ const Files = require('./routes/files.js');
 serverApp.use('/files', Files);
 serverApp.use('/files', express.static(path.join(__dirname, 'html')))
 
+// Overlay
+const Overlay = require('./routes/overlay.js');
+serverApp.use('/overlay', Overlay);
+serverApp.use('/overlay', express.static(path.join(__dirname, 'html')))
+
 // Prevent multiple instances of the app
 if (!app.requestSingleInstanceLock()) {
 	app.quit();
