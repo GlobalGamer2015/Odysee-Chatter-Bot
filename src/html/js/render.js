@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron/renderer');
+/*const { ipcRenderer } = require('electron/renderer');
 ipcRenderer.on('user_info', function(event, message) {
     window.localStorage.setItem('nickname', `${message.user.nickname}`);
 	window.localStorage.setItem('name', `${message.user.name}`);
@@ -10,7 +10,8 @@ ipcRenderer.on('user_info', function(event, message) {
 	window.localStorage.setItem('api_key', `${message.user.api_key}`);
 	window.localStorage.setItem('claim_id', `${message.user.claim_id}`);
     window.localStorage.setItem('app_version', `${message.user.app_version}`);
-})
+    window.localStorage.setItem('sub_count', `${message.user.sub_count}`);
+})*/
 
 function popupWindow(html) {
     const name = html.getAttribute('data-streamer-name');
@@ -221,11 +222,8 @@ function OnClick(button) {
 	else if(button == 'chat') {
 		window.location.href = 'http://localhost:4187/chat';
 	}
-	else if(button == 'odysee chatter bot') {
+	else if(button == 'home') {
 		window.location.href = 'http://localhost:4187/user';
-	}
-	else if(button == 'logout') {
-		window.location.href = 'http://localhost:4187/logout';
 	}
     else if(button == 'lbc') {
         shell.openExternal("https://odysee.com/@GG2015:b");
@@ -238,6 +236,12 @@ function OnClick(button) {
     }
     else if(button == 'settings') {
         window.location.href = 'http://localhost:4187/settings';
+    }
+    else if(button == 'connect') {
+        window.location.href = 'http://localhost:4187/connect';
+    }
+    else if(button == 'livestreams') {
+        window.location.href = 'http://localhost:4187/livestreams';
     }
 }
 
@@ -376,18 +380,13 @@ function addTip(comment) {
     const url_odysee = url.split("lbry://")
     const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
 
-    const fetch = require('node-fetch');
-    const body = { 
-        api_key: window.localStorage.getItem('api_key'),
-        user_claim_id: channel_id
-    }
-    fetch(`https://www.odysee-chatter.com/api/getSuperChannelInformation`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body)
-    })
-    .then(res => res.json())
-    .then(channel => {
+    const { Lbry } = require('lbry-sdk-node/lbry');
+    Lbry.claim_search({claim_id: user_claim_id})
+	.catch((e) => {
+		console.log(e)
+	})
+	.then(channel => {
+        console.log(channel)
         const thumbnail = channel.channel.items[0].value.thumbnail.url;
         const superchats_wrapper = document.getElementById("livestream-superchats__inner");
 
@@ -572,7 +571,12 @@ function readChatHistory() {
                 var chatData = JSON.parse(chat)
 
                 // Get Channel Information
-                const body = { 
+                const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
+                Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
+				.catch((e) => {
+					console.log(e)
+				})
+                /*const body = { 
                     api_key: window.localStorage.getItem('api_key')
                 }
                 fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
@@ -580,10 +584,10 @@ function readChatHistory() {
   		            headers: { 'Content-Type': 'application/json' },
   		            body: JSON.stringify(body)
 	            })
-	            .then(res => res.json())
+	            .then(res => res.json())*/
 	            .then(channel => {
                     // Load to messageContainer
-                    const streamer = channel.channel.items[0].name;
+                    const streamer = channel.items[0].name;
                     const messages = chatData.messages;
                 
                     const messageContainer = document.getElementById("messageContainer");
@@ -607,7 +611,11 @@ function readChatHistory() {
                         const url_odysee = url.split("lbry://")
                         const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
 
-                        const body = { 
+                        Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
+				        .catch((e) => {
+					        console.log(e)
+				        })
+                        /*const body = { 
                             api_key: window.localStorage.getItem('api_key'),
                             user_claim_id: channel_id
                         }
@@ -616,9 +624,9 @@ function readChatHistory() {
   		                    headers: { 'Content-Type': 'application/json' },
   		                    body: JSON.stringify(body)
 	                    })
-	                    .then(res => res.json())
+	                    .then(res => res.json())*/
 	                    .then(channel => {
-                            const thumbnail = channel.channel.items[0].value.thumbnail.url;
+                            const thumbnail = channel.items[0].value.thumbnail.url;
                             const superchats_wrapper = document.getElementById("livestream-superchats__inner");
 
                             if(support_amount) {
@@ -922,27 +930,11 @@ function OdyseeBackendStatus() {
             document.getElementById('lbrynet_status').innerText = "Unknown"
         }
 	})
-
-    fetch(`https://odysee-chatter.com`, {
-		method: 'get',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-	.then(res => {
-        // Odysee Chatter Status
-        if(res.statusText === "OK") {
-            document.getElementById('odyseechatter_status').innerText = "OK"
-        }
-        else if(res.statusText !== "OK") {
-            document.getElementById('odyseechatter_status').innerText = "Unknown"
-        }
-	})
 }
 
 function Reaction() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('claim_id') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
         method: 'get'
     })
     .then(res => res.json())
@@ -985,9 +977,11 @@ function Reaction() {
 
 function SubCount() {
     const fetch = require('node-fetch');
+    document.getElementById('followers').innerText = window.localStorage.getItem('sub_count');
+    const message = document.getElementById("messageContainer");
 
     function loop() {
-        fetch(`https://api.odysee.com/subscription/sub_count?auth_token=2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ&claim_id=${window.localStorage.getItem('claim_id')}`, {
+        fetch(`https://api.odysee.com/subscription/sub_count?auth_token=2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ&claim_id=${window.localStorage.getItem('ChannelClaimId')}`, {
 		    method: 'get',
 		    headers: {
 			    'Content-Type': 'application/json'
@@ -995,21 +989,44 @@ function SubCount() {
 	    })
 	    .then(res => res.json())
 	    .then(json => {
-            document.getElementById('followers').innerText = json.data[0];
+            if(json.data[0] !== window.localStorage.getItem('sub_count')) {
+                const subCount = json.data[0] - window.localStorage.getItem('sub_count');
+                if(subCount >= 1) {
+                    if(subCount === 1) {
+                        document.getElementById('followers').innerText = json.data[0];
+                        window.localStorage.setItem('sub_count', json.data[0])
+                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} follower within the last 1 minute.</div>`;
+                    }
+                    else {
+                        document.getElementById('followers').innerText = json.data[0];
+                        window.localStorage.setItem('sub_count', json.data[0])
+                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} followers within the last 1 minute.</div>`;
+                    }
+                }
+                /*else {
+                    if(subCount === 0) {
+                        // console.log('lost 1 follower or none')
+                    }
+                    else {
+                        document.getElementById('followers').innerText = json.data[0];
+                        window.localStorage.setItem('sub_count', json.data[0])
+                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You lost ${subCount} followers within the last 1 minute.</div>`;
+                    }
+                }*/
+            }
 	    })
     }
-    loop()
     
     setInterval(function() {
         loop()
-    },180000)
+    },60000)
 }
 
 function Viewers() {
     const fetch = require('node-fetch');
     const WS = require('ws');
 
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('claim_id') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
         method: 'get'
     })
     .then(res => res.json())
@@ -1035,7 +1052,7 @@ function Viewers() {
 
 function StreamViews() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('claim_id') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
         method: 'get'
     })
     .then(res => res.json())
@@ -1064,7 +1081,7 @@ function StreamViews() {
 
 function SuperChat() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('claim_id') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
         method: 'get'
     })
     .then(res => res.json())
@@ -1124,7 +1141,7 @@ function UpdateChat() {
 
         chatObject.messages = [];
 
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
             method: 'get',
             headers: {
 			    'Content-Type': 'application/json'
@@ -1204,18 +1221,21 @@ function UpdateChat() {
                 })
 
                 // Get Channel Information
-                const body = { 
-                    api_key: window.localStorage.getItem('api_key')
-                }
-                fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
+                const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
+                Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
+				.catch((e) => {
+					console.log(e)
+				})
+
+                /*fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
   		            method: 'POST',
   		            headers: { 'Content-Type': 'application/json' },
   		            body: JSON.stringify(body)
 	            })
-	            .then(res => res.json())
+	            .then(res => res.json())*/
 	            .then(channel => {
                     // Load to messageContainer
-                    const streamer = channel.channel.items[0].name;
+                    const streamer = channel.items[0].name;
                     const messages = chatObject.messages;
                 
                     const messageContainer = document.getElementById("messageContainer");
@@ -1338,55 +1358,45 @@ function SendMessageFromChat(chat) {
     if(chat.value.length >= 1) {
         const fetch = require('node-fetch')
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        const body = { 
-            api_key: window.localStorage.getItem('api_key')
-        }
-        fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+        
+        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            method: 'get',
+			headers: {
+				'Content-Type': 'application/json'
+			},
         })
         .then(res => res.json())
-        .then(channel => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
-                method: 'get',
-			    headers: {
-				    'Content-Type': 'application/json'
-			    },
-            })
-            .then(res => res.json())
-            .then(stream => {
-                Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(chat.value)}) // Your Bot Channel ID
-	            .catch((e) => {
-		            console.log(e)
-	            })
-	            .then(signed => {
-                    fetch(`https://comments.odysee.com/api/v2?m=comment.Create`, {
-			            method: 'post',
-			            headers: {
-				            'Content-Type': 'application/json'
-			            },
-			            body: `{
-				            "jsonrpc":"2.0",
-				            "id":1,
-				            "method":"comment.Create",
-				            "params":{
-					            "channel_id":"${window.localStorage.getItem('claim_id')}",
-					            "channel_name":"${channel.channel.items[0].name}",
-					            "claim_id":"${stream.data[0].claim_id}",
-					            "comment":"${chat.value}",
-					            "signature": "${signed.signature}",
-					            "signing_ts": "${signed.signing_ts}"
-				            }
-			            }`
-		            })
-		            .then(res => res.json())
-		            .then(res => {
-			            if(res.result) {
-                            chat.value = "";
-                        }
-		            })
-                })
+        .then(stream => {
+            Lbry.channel_sign({channel_id: localStorage.getItem('ChannelClaimId'), hexdata: toHex(chat.value)})
+	        .catch((e) => {
+		        console.log(e)
+	        })
+	        .then(signed => {
+                fetch(`https://comments.odysee.com/api/v2?m=comment.Create`, {
+			        method: 'post',
+			        headers: {
+				        'Content-Type': 'application/json'
+			        },
+			        body: `{
+				        "jsonrpc":"2.0",
+				        "id":1,
+				        "method":"comment.Create",
+				        "params":{
+					        "channel_id":"${localStorage.getItem('ChannelClaimId')}",
+					        "channel_name":"${localStorage.getItem('ChannelClaimName')}",
+					        "claim_id":"${stream.data[0].claim_id}",
+					        "comment":"${chat.value}",
+					        "signature": "${signed.signature}",
+					        "signing_ts": "${signed.signing_ts}"
+				        }
+			        }`
+		        })
+		        .then(res => res.json())
+		        .then(res => {
+			        if(res.result) {
+                        chat.value = "";
+                    }
+		        })
             })
         })
     }

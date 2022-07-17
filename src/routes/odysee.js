@@ -7,41 +7,11 @@ const Alert = require('./alert')
 const API = require('./api');
 const process = require('process');
 
-module.exports = function(EmailAddress, io) {
-	const body = { 
-		email_address: EmailAddress
-	}
-   	fetch(`https://www.odysee-chatter.com/api/getCredentials`, {
-		method: 'post',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(body)
-	})
-	.then(res => res.json())
-	.then(res => {
-		if(res.status == "Failed"){
-			console.log(res.reason);
-		}
-		else if(res.status == "SUCCESS"){
-			if(res.claim_id == "") {
-				
-				setTimeout(function () {
-					io.emit('user', {
-						error: 'Claim ID not found.'
-					});
-				}, 5000)
-			}
-			else {
-				global.Api_Key = res.api_key;
-				global.Claim_Id = res.claim_id;
-				getStreamClaimId(Claim_Id)
-			}
-		}
-	})
+module.exports = function(ChannelClaimId,io) {
+	getStreamClaimId(ChannelClaimId)
 
-	function getStreamClaimId(Claim_Id) {
-		var url = "https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + Claim_Id + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201";
+	function getStreamClaimId(ChannelClaimId) {
+		var url = "https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + ChannelClaimId + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201";
 		var currentClaimid = (async () => {
 			try {
 				const response = await got(url, { json: true, timeout: 5000, retry: 2, allowGetBody: true, responseType: 'json' });
@@ -72,11 +42,13 @@ module.exports = function(EmailAddress, io) {
 		socket.addEventListener('open', function (event) {
 			logger.WriteLog('Connected to Odysee WebSocket server.', 'Connected to Odysee WebSocket server.')
 			//Alert.ShowMessage('Connected!', 'You are connected to Odysee Stream Chat.') - Disabling temporarily.
-			const timers = require('./odysee_timers.js')(claimid, Claim_Id, Api_Key);
+			const timers = require('./odysee_timers.js')(claimid, ChannelClaimId);
 		});
 		// Listen for messages
 		socket.addEventListener('message', function (event) {
 			var comment=JSON.parse(event.data);
+
+			console.log(comment)
 
 			var msg = comment.data.comment.comment;
 			var msg_id = comment.data.comment.comment_id;
@@ -100,7 +72,7 @@ module.exports = function(EmailAddress, io) {
 				event: event
 			})
 
-			commands = require('./odysee_commands.js')(comment, claimid, Claim_Id, Api_Key);
+			commands = require('./odysee_commands.js')(comment, claimid, ChannelClaimId);
 			chat_history = require('./odysee_chat_history.js')(event)
 			
 
@@ -159,7 +131,7 @@ module.exports = function(EmailAddress, io) {
 						}
 					}
 					if(settingsObject["tip-chat-notification"] == "enabled") {
-						API.createComment(`Tip detected: ${channel_name} tipped ${support_amount} LBC!`, claimid, Claim_Id, Api_Key);
+						API.createComment(`Tip detected: ${channel_name} tipped ${support_amount} LBC!`, claimid, ChannelClaimId);
 					}
 				}
 
@@ -208,7 +180,7 @@ module.exports = function(EmailAddress, io) {
 						}
 					}
 					if(settingsObject["tip-chat-notification"] == "enabled") {
-						API.createComment(`Tip detected: ${channel_name} tipped $${support_amount} USD!`, claimid, Claim_Id, Api_Key);
+						API.createComment(`Tip detected: ${channel_name} tipped $${support_amount} USD!`, claimid, ChannelClaimId);
 					}
 				}
 

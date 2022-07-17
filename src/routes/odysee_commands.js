@@ -3,7 +3,7 @@ const fs = require('fs');
 const Alert = require('./alert');
 const process = require('process');
 
-module.exports = function(comment, claimid, Claim_Id, Api_Key) {
+module.exports = function(comment, claimid, ChannelClaimId) {
     var msg = comment.data.comment.comment;
 	var msg_id = comment.data.comment.comment_id;
 	var claim_id = comment.data.comment.claim_id;
@@ -35,7 +35,7 @@ module.exports = function(comment, claimid, Claim_Id, Api_Key) {
 
                     if(commandInformationParsed.type == "Command") {
                         if(msg == commandInformationParsed.name && commandInformationParsed.active == true) {
-                            API.createComment(commandInformationParsed.reply, claimid, Claim_Id, Api_Key);
+                            API.createComment(commandInformationParsed.reply, claimid, ChannelClaimId);
                         }
                     }
                 })
@@ -61,7 +61,7 @@ module.exports = function(comment, claimid, Claim_Id, Api_Key) {
                                 var user = shoutout_user[1];
                             
                                 command_reply = command.reply.replace("<user>", user);
-                                API.createComment(command_reply, claimid, Claim_Id, Api_Key);
+                                API.createComment(command_reply, claimid, ChannelClaimId);
                             }
                         }
                     }

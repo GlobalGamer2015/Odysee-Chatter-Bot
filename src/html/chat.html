@@ -27,6 +27,7 @@
         <script>
             var socket = io("http://localhost:4187");
             socket.on('addComment', (event) => {
+				console.log(event)
                 const message = document.getElementById("messageContainer");
 				const streamerImage = `<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15" height="15" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>`;
 				const moderatorImage = `<svg size="16" class="icon icon--BadgeMod" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24" xml:space="preserve"><style type="text/css">.st0{fill:FF3850}.st1{fill:#181021}.st2{fill:#FFFFFF}</style><g><g><path class="st0" d="M11.69,6.77c4.86,0,7.55,0.9,8.52,1.31c1.29-1.46,3.28-4.14,3.28-6.76c0,0-4.17,4.86-6.92,5.12 c-1.25-0.87-2.77-1.38-4.41-1.38c0,0-3.21-0.06-4.63,1.31C4.81,6.44,0.51,1.32,0.51,1.32c0,2.61,1.97,5.27,3.25,6.74 C4.71,7.59,7.03,6.77,11.69,6.77z M19.87,19.38c0.02-0.13,0.04-0.27,0.04-0.4V12.8c0-1.03-0.21-2.02-0.58-2.92 c-0.83-0.33-3.25-1.11-7.64-1.11c-4.29,0-6.33,0.75-7,1.06c-0.38,0.91-0.6,1.91-0.6,2.97v6.18c0,0.13,0.02,0.26,0.04,0.39 C1.6,19.73,0,22.54,0,22.54L12,24l12-1.46C24,22.54,22.36,19.79,19.87,19.38z"></path></g></g><path class="st1" d="M13,18.57H11c-2.27,0-4.12-0.82-4.12-2.88v-2.46c0-2.77,2.17-3.94,5.11-3.94s5.11,1.17,5.11,3.94v2.46 C17.11,17.75,15.27,18.57,13,18.57z"></path><path class="st2" d="M15.06,15.25c-0.28,0-0.5-0.22-0.5-0.5v-1.42c0-0.32,0-1.31-1.63-1.31c-0.28,0-0.5-0.22-0.5-0.5 s0.22-0.5,0.5-0.5c1.65,0,2.63,0.86,2.63,2.31v1.42C15.56,15.02,15.33,15.25,15.06,15.25z"></path></svg>`;
@@ -68,39 +69,38 @@
                 	else if(event.user == "user"){
                     	message.innerHTML += `<div id="comment" name="${event.comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.username}" data-streamer-id="${event.channel.replace(`lbry://${event.username}#`, '')}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${event.username}</a>: ${event.message}</div>`;
                 	}
-				}
+								}
 
-				const tutorialMessage = document.getElementById("tutorial");
-				if(tutorialMessage) {
-					tutorialMessage.remove();
-				}
+							const tutorialMessage = document.getElementById("tutorial");
+							if(tutorialMessage) {
+								tutorialMessage.remove();
+							}
             });
 
-			window.addEventListener('storage', function(e) {
-				console.log(e)
-				if(e.key === "removeComment") {
-					if(e.oldValue !== e.newValue) {
-						document.getElementsByName(e.newValue).forEach(value_element => {
-							value_element.remove()
+						window.addEventListener('storage', function(e) {
+							console.log(e)
+							if(e.key === "removeComment") {
+								if(e.oldValue !== e.newValue) {
+									document.getElementsByName(e.newValue).forEach(value_element => {
+										value_element.remove()
+									})
+									removeComment(e.newValue)
+								}
+							}
 						})
 
-						removeComment(e.newValue)
-					}
-				}
-			})
-
-			document.addEventListener('DOMContentLoaded', function() {
-				const chat = document.getElementById("input-chat");
-				chat.addEventListener("keyup", function(event) {
-					if(event.key === "Enter") {
-						SendMessageFromChat(chat)
-					}
-				})
-			})
+						document.addEventListener('DOMContentLoaded', function() {
+							const chat = document.getElementById("input-chat");
+							chat.addEventListener("keyup", function(event) {
+								if(event.key === "Enter") {
+								SendMessageFromChat(chat)
+							}
+						})
+					})
         </script>
 	</head>
 	<body onload="readChatHistory(), ReadChatPage_Language(), Reaction(), SubCount(), Viewers(), StreamViews(), SuperChat(), Chat_Interacter()">
-        <nav class="navbar">
+		<nav class="navbar">
 			<div class="navbar-collapse collapse">
 				<ul class="navbar-nav">
 					<li class="nav-item">
@@ -109,26 +109,24 @@
 					<li class="nav-item">
 					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
 				 	</li>
-
-				  	<li class="nav-item name">
-					  	<button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('odysee chatter bot')">Odysee Chatter Bot</button>
-				  	</li>
-				  	<li class="nav-item settings">
-					  	<button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
-				  	</li>
-
-				  	<li class="nav-item lbc">
-					  	<button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
-				  	</li>
-				  	<li class="nav-item bmac">
-					  	<button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
-				  	</li>
-				  	<li class="nav-item logout">
-					  	<button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
-				  	</li>
+				  <li class="nav-item name">
+					  <button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('home')">Odysee Chatter Bot</button>
+				  </li>
+				  <li class="nav-item settings">
+					  <button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  </li>
+				  <li class="nav-item livestreams">
+					  <button id="navbar-livestreams" type="button" class="nav-link" onclick="OnClick('livestreams')">Livestreams</button>
+				  </li>
+				  <li class="nav-item lbc">
+					  <button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  </li>
+				  <li class="nav-item bmac">
+					  <button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  </li>
 				</ul>
 			</div>
-  		</nav>
+  	</nav>
 		<div class="container flex-direction" style="width: 100%; background-color: transparent; margin-top: -5px; margin-bottom: 20px; display: inline-flex;">
 			<div class="childcontainer">
 				<div class="viewers">

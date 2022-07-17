@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Odysee Chatter Bot</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="http://localhost:4187/files/css/index.css">
+    <link rel="stylesheet" href="http://localhost:4187/files/css/livestreams.css">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src='http://localhost:4187/files/js/render.js'></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src='http://localhost:4187/files/js/livestreams/data_handler.js'></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="http://localhost:4187/files/socket.io/socket.io.js"></script>
+    <script>
+      function showMore(element) {
+        var stream_claim_id = element.parentElement.parentElement.parentElement.parentElement.id
+        var moreText = element.parentElement.children[7];
+        var showMore = element.parentElement.children[8];
+        if (moreText.style.display === "none") {
+          moreText.style.display = "inline";
+          showMore.innerHTML = "Show Less";
+        }
+        else {
+          moreText.style.display = "none";
+          showMore.innerHTML = "Show More";
+        }
+      }
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const socket = io("http://localhost:4187");
+        socket.on('livestream', (data) => {
+          if(document.getElementById('loading')) {
+            document.getElementById('loading').remove()
+          }
+          if(document.getElementById(`stream_${data.claim_id}`)) {
+            // Do not add
+          }
+          else {
+            document.getElementById('streams').innerHTML += `
+            <div id="stream_${data.claim_id}" class="stream_container">
+              <div id="grid-container" class="grid-container">
+                <div class="thumbnail" style="background-color: #241c30;">
+                  <a href="${data.stream_url}" target="_blank">
+                    <img class="thumbnail_image" src="${data.thumbnail_url}" onError="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png';">
+                  </a>
+                </div>
+                <div class="information">
+                  <div id="information-data" class="information-data">
+                    <h3 style="margin-top:-5px;">Stream information</h3>
+                    <div class="led-red"></div>
+                    <br>
+                    ${title(data)}
+                    ${channelLink(data)}
+                    ${stream_name(data)}
+                    ${language(data)}
+                    <span id="moreText" style="display:none;">
+                    ${is_filtered(data)}
+                    ${is_nsfw(data)}
+                    ${viewCount(data)}
+                    ${live(data)}
+                    ${canonicalUrl(data)}
+                    ${_name(data)}
+                    ${shortUrl(data)}
+                    ${claimId(data)}
+                    ${author(data)}
+                    ${bid_state(data)}
+                    ${claim_address(data)}
+                    ${claim_id(data)}
+                    ${created_at(data)}
+                    ${description(data)}
+                    ${effective_amount(data)}
+                    ${fee(data)}
+                    ${height(data)}
+                    ${id(data)}
+                    ${is_cert_processed(data)}
+                    ${is_cert_valid(data)}
+                    ${license(data)}
+                    ${license_url(data)}
+                    ${modified_at(data)}
+                    ${publisher_id(data)}
+                    ${publisher_sig(data)}
+                    ${release_time(data)}
+                    ${thumbnail_url(data)}
+                    ${transaction_hash_id(data)}
+                    ${transaction_hash_update(data)}
+                    ${transaction_time(data)}
+                    ${type(data)}
+                    ${valid_at_height(data)}
+                    ${audio_duration(data)}
+                    ${certificate(data)}
+                    ${city(data)}
+                    ${claim_id_list(data)}
+                    ${claim_reference(data)}
+                    ${claim_type(data)}
+                    ${code(data)}
+                    ${content_type(data)}
+                    ${country(data)}
+                    ${duration(data)}
+                    ${email(data)}
+                    ${fee_address(data)}
+                    ${fee_currency(data)}
+                    ${frame_height(data)}
+                    ${frame_width(data)}
+                    ${has_claim_list(data)}
+                    ${latitude(data)}
+                    ${list_type(data)}
+                    ${longitude(data)}
+                    ${os(data)}
+                    ${preview(data)}
+                    ${sd_hash(data)}
+                    ${source_hash(data)}
+                    ${source_media_type(data)}
+                    ${source_name(data)}
+                    ${source_size(data)}
+                    ${source_url(data)}
+                    ${state(data)}
+                    ${timestamp(data)}
+                    ${version(data)}
+                    ${vout(data)}
+                    ${vout_update(data)}
+                    ${website_url(data)}
+                    </span>
+                    <button onclick="showMore(this)" id="showMore">Show More</button>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          }
+        })
+      }, false);
+    </script>
+	</head>
+	<body>
+		<nav class="navbar">
+			<div class="navbar-collapse collapse">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<button id="navbar-commands" type="button" class="nav-link" onclick="OnClick('commands')">Commands</button>
+					</li>
+					<li class="nav-item">
+					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
+				 	</li>
+				  <li class="nav-item name">
+					  <button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('home')">Odysee Chatter Bot</button>
+				  </li>
+				  <li class="nav-item settings">
+					  <button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  </li>
+				  <li class="nav-item livestreams">
+					  <button id="navbar-livestreams" type="button" class="nav-link" onclick="OnClick('livestreams')">Livestreams</button>
+				  </li>
+				  <li class="nav-item lbc">
+					  <button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  </li>
+				  <li class="nav-item bmac">
+					  <button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  </li>
+				</ul>
+			</div>
+  	</nav>
+		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
+      <div id="streams">
+        <div id="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
+		</div>
+	</body>
+</html>

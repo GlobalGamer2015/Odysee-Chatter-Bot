@@ -17,8 +17,9 @@ const unhandled = require('electron-unhandled');
 const contextMenu = require('electron-context-menu');
 const Api = require('./routes/api')();
 const Alert = require('electron-alert');
+const fetch = require('node-fetch');
 require('@electron/remote/main').initialize();
-const user = {};
+//const user = {};
 
 autoUpdater.setFeedURL({
 	provider: 'github',
@@ -73,11 +74,12 @@ const createMainWindow = async () => {
 		width: width,
 		height: height,
 		webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
+      nodeIntegration: true,
+      contextIsolation: false,
 			enableRemoteModule: true
-        }
+    }
 	});
+	win.setBackgroundColor('#241c30');
 	require("@electron/remote/main").enable(win.webContents)
 
 	win.setMenu(null)
@@ -94,21 +96,21 @@ const createMainWindow = async () => {
 	});
 
 	//await win.loadFile(path.join(__dirname, './html/connect.html'));
-	await win.loadURL(`${config_data.baseURL}/login`);
+	await win.loadURL(`${config_data.baseURL}/connect`);
 
 	return win;
 };
 
-const { auth } = require('express-openid-connect');
+//const { auth } = require('express-openid-connect');
 
-const config = {
+/*const config = {
   	authRequired: false,
   	auth0Logout: true,
   	secret: config_data.secret,
   	baseURL: config_data.baseURL,
   	clientID: config_data.clientID,
   	issuerBaseURL: config_data.issuerBaseURL
-};
+};*/
 
 // View engine setup
 serverApp.set('views', path.join(__dirname, 'views'));
@@ -117,66 +119,36 @@ serverApp.engine('html', require('ejs').renderFile);
 serverApp.set('views',__dirname+'/html/');
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
-serverApp.use(auth(config));
+//serverApp.use(auth(config));
 
-function connect(req, res) {
-	const EmailAddress = req.oidc.user.email;
-	const fetch = require('node-fetch');
-	const body = { 
-		email_address: EmailAddress
-	}
-	fetch(`https://www.odysee-chatter.com/api/getCredentials`, {
-  		method: 'POST',
-  		headers: { 'Content-Type': 'application/json' },
-  		body: JSON.stringify(body)
-	})
-	.then(rez => rez.json())
-	.then(rez => {
-		if(rez.status == "Failed"){
-			console.log(rez.reason);
-		}
-		else if(rez.status == "SUCCESS"){
+serverApp.get('/connect', function (req, res, next) {
+	res.render('./connect.html')
+})
 
-			user['nickname'] = `${req.oidc.user.nickname}`;
-			user['name'] = `${req.oidc.user.name}`;
-			user['picture'] = `${req.oidc.user.picture}`;
-			user['updated_at'] = `${req.oidc.user.updated_at}`;
-			user['email'] = `${req.oidc.user.email}`;
-			user['email_verified'] = `${req.oidc.user.email_verified}`;
-			user['sub'] = `${req.oidc.user.sub}`;
-			user['api_key'] = `${rez.api_key}`;
-			user['claim_id'] = `${rez.claim_id}`;
-			user['app_version'] = app.getVersion();
+serverApp.get('/connecting', function (req, res, next) {
+	const ChannelClaimId = req.query.ChannelClaimUrl;
+	const Odysee = require('./routes/odysee')(ChannelClaimId, io);
+	res.redirect('/user')
+})
 
-			if(rez.claim_id === "") {
-				serverApp.get('/noclaimid', function (req, res, next) {
-					res.render('./noclaimid.html', {user: user})
-				});
-				mainWindow.loadURL(`${config_data.baseURL}/noclaimid`)
-			}
-			else if(rez.claim_id !== "") {
-				const Odysee = require('./routes/odysee')(EmailAddress, io);
-				mainWindow.loadURL(`${config_data.baseURL}/user`)
-				setTimeout(function() {
-					win.webContents.send('user_info', {user: user})
-				}, 1000)
-			}
-		}
-	})
-}
+serverApp.get('/livestreams', function (req, res, next) {
+	const Livestreams = require('./routes/livestreams')(io);
+	res.render('./livestreams.html')
+})
 
 // req.isAuthenticated is provided from the auth router
-serverApp.get('/', (req, res, next) => {
+/*serverApp.get('/', (req, res, next) => {
   	res.send(req.oidc.isAuthenticated() ? connect(req, res) : app.quit());
-});
+});*/
 
 /* GET popup. */
 serverApp.get(`/popup`, function (req, res, next) {
 	res.render('./popup.html', { data: { name: req.query.name, id: req.query.id, comment_id: req.query.comment_id }})
 });
+
 /* GET user profile. */
 serverApp.get(`/user`, function (req, res, next) {
-	res.render('./main.html', {user: user})
+	res.render('./main.html')
 });
 /* GET chat. */
 serverApp.get('/chat', function (req, res, next) {
@@ -237,7 +209,7 @@ app.on('activate', async () => {
 })();
 
 server.listen(serverPort), (err) => {
-    if(err) {
+  if(err) {
 		Alert.ShowErrorMessage(err)
-    }
+  }
 }

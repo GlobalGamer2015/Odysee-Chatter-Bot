@@ -29,34 +29,30 @@
 					<li class="nav-item">
 					  	<button id="navbar-chat" type="button" class="nav-link" onclick="OnClick('chat')">Chat</button>
 				 	</li>
-
-				  	<li class="nav-item name">
-					  	<button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('odysee chatter bot')">Odysee Chatter Bot</button>
-				  	</li>
-				  	<li class="nav-item settings">
-					  	<button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
-				  	</li>
-
-				  	<li class="nav-item lbc">
-					  	<button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
-				  	</li>
-				  	<li class="nav-item bmac">
-					  	<button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
-				  	</li>
-				  	<li class="nav-item logout">
-					  	<button id="navbar-logout" type="button" class="nav-link" onclick="OnClick('logout')">Logout</button>
-				  	</li>
+				  <li class="nav-item name">
+					  <button id="navbar-odyseechatterbot" type="button" class="nav-link" onclick="OnClick('home')">Odysee Chatter Bot</button>
+				  </li>
+				  <li class="nav-item settings">
+					  <button id="navbar-settings" type="button" class="nav-link" onclick="OnClick('settings')">Settings</button>
+				  </li>
+				  <li class="nav-item livestreams">
+					  <button id="navbar-livestreams" type="button" class="nav-link" onclick="OnClick('livestreams')">Livestreams</button>
+				  </li>
+				  <li class="nav-item lbc">
+					  <button id="navbar-lbc" type="button" class="nav-link" onclick="OnClick('lbc')">Donate LBC</button>
+				  </li>
+				  <li class="nav-item bmac">
+					  <button id="navbar-bmac" type="button" class="nav-link" onclick="OnClick('bmac')">Buy me a coffee</button>
+				  </li>
 				</ul>
 			</div>
-  		</nav>
+  	</nav>
 		<div class="container" style="padding: 10px 10px 10px 10px; border-radius: 15px;">
 			<!-- Will be used in the future. -->
 			<div id="server_status" style="width: 50%;">
 				<h3>Server Status</h3>
 				<label>Odysee:</label> <span id="odysee_status"></span>
 				<br><label>Lbrynet:</label> <span id="lbrynet_status"></span>
-				<br><label>Odysee Chatter:</label> <span id="odyseechatter_status"></span>
-				<br><a onclick="OdyseeBackendStatus()"><label>Click me to check Status</label></a>
 			</div>
 
 			<div id="about" style="width: 50%;">
@@ -74,9 +70,6 @@
 				<br><label>CoinDodo</label> <a href="https://coindodo.io/lbry/" target="_blank">URL</a>
 				<br><label>Watch on Odysee</label> <a href="https://github.com/kodxana/Watch-on-Odysee" target="_blank">URL</a>
 				<br><label>LBC Today</label> <a href="https://odysee.com/@code:a/price:1?&sunset=lbrytv" target="_blank">URL</a>
-				<br><label>Check Who Is Live On Odysee</label> <a href="https://live.odysee-chatter.com" target="_blank">URL</a>
-				<br><label>Odysee Notification Live Bot</label> <a href="https://odysee-chatter.com/odysee_live_bot" target="_blank">URL</a>
-				<br><label>Odysee Stream Deck Plugin</label> <a href="https://github.com/GlobalGamer2015/Odysee-Stream-Deck-Plugin/releases" target="_blank">URL</a>
 			</div>
 			
 			<div id="overlay">

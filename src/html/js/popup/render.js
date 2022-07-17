@@ -17,7 +17,7 @@ function Interacter(tempData,sdk) {
             // LBRY App or LBRYnet is active.
             document.getElementById('app_status').innerText = "SDK detected.";
 
-            Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+            Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
             .then(info => {
                 document.getElementById('thumbnail').src = `${info.items[0].value.thumbnail.url}`;
                 document.getElementById('interactor').innerText = `Interacting as ${info.items[0].name}`;
@@ -52,9 +52,9 @@ function Option_Pin(tempData,sdk) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
 
-        Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+        Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
         .then(info => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
                 method: 'get',
                 headers: {
 			        'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ function Option_Pin(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=comment.Pin`, {
 		                            method: 'post',
@@ -116,9 +116,9 @@ function Option_UnPin(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+        Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
         .then(info => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
                 method: 'get',
                 headers: {
 			        'Content-Type': 'application/json'
@@ -139,14 +139,14 @@ function Option_UnPin(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=comment.Pin`, {
 		                            method: 'post',
 	    	                        headers: {
     			                        'Content-Type': 'application/json'
 		                            },
-                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"comment.Pin", "params":{ "comment_id": "${comment_id}", "channel_id": "${window.localStorage.getItem('claim_id')}", "channel_name": "${info.items[0].name}", "remove":true, "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" } }`
+                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"comment.Pin", "params":{ "comment_id": "${comment_id}", "channel_id": "${window.localStorage.getItem('ChannelClaimId')}", "channel_name": "${info.items[0].name}", "remove":true, "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" } }`
 	                            })
                                 .then(res => res.json())
                                 .then(res => {
@@ -180,7 +180,7 @@ function Option_AddAsModerator(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
             method: 'get',
             headers: {
 		        'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ function Option_AddAsModerator(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=moderation.AddDelegate`, {
 		                            method: 'post',
@@ -251,7 +251,7 @@ function Option_RemoveAsModerator(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
             method: 'get',
             headers: {
 		        'Content-Type': 'application/json'
@@ -282,7 +282,7 @@ function Option_RemoveAsModerator(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=moderation.RemoveDelegate`, {
 		                            method: 'post',
@@ -322,7 +322,7 @@ function Option_Remove(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
             method: 'get',
             headers: {
 		        'Content-Type': 'application/json'
@@ -343,7 +343,7 @@ function Option_Remove(tempData,sdk) {
                 comments.forEach(comment_data => {
                     const comment_id = comment_data.comment_id;
                     if(comment_id === tempData.comment_id) {
-                        Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                        Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                         .then(signed => {
                             fetch(`https://comments.odysee.com/api/v2?m=comment.Abandon`, {
 		                        method: 'post',
@@ -383,9 +383,9 @@ function Option_Block_Perm(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+        Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
         .then(info => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
                 method: 'get',
                 headers: {
     			    'Content-Type': 'application/json'
@@ -406,14 +406,14 @@ function Option_Block_Perm(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=moderation.Block`, {
 		                            method: 'post',
 		                            headers: {
 			                            'Content-Type': 'application/json'
 		                            },
-                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.Block", "params":{ "mod_channel_id":"${window.localStorage.getItem('claim_id')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "block_all":false, "blocked_channel_id":"${tempData.id}", "blocked_channel_name":"${tempData.name}" } }`
+                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.Block", "params":{ "mod_channel_id":"${window.localStorage.getItem('ChannelClaimId')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "block_all":false, "blocked_channel_id":"${tempData.id}", "blocked_channel_name":"${tempData.name}" } }`
 	                            })
                                 .then(res => res.json())
                                 .then(res => {
@@ -446,9 +446,9 @@ function Option_Block_Temp(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+        Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
         .then(info => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
                 method: 'get',
                 headers: {
     			    'Content-Type': 'application/json'
@@ -469,14 +469,14 @@ function Option_Block_Temp(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=moderation.Block`, {
 		                            method: 'post',
 		                            headers: {
 			                            'Content-Type': 'application/json'
 		                            },
-                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.Block", "params":{ "mod_channel_id":"${window.localStorage.getItem('claim_id')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "block_all":false, "blocked_channel_id":"${tempData.id}", "blocked_channel_name":"${tempData.name}", "time_out":600 } }`
+                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.Block", "params":{ "mod_channel_id":"${window.localStorage.getItem('ChannelClaimId')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "block_all":false, "blocked_channel_id":"${tempData.id}", "blocked_channel_name":"${tempData.name}", "time_out":600 } }`
 	                            })
                                 .then(res => res.json())
                                 .then(res => {
@@ -509,9 +509,9 @@ function Option_Block_Unban(tempData,sdk) {
     if(sdk.disabled === false) {
         const fetch = require('node-fetch');
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-        Lbry.claim_search({claim_id: window.localStorage.getItem('claim_id')})
+        Lbry.claim_search({claim_id: window.localStorage.getItem('ChannelClaimId')})
         .then(info => {
-            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('claim_id')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+            fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
                 method: 'get',
                 headers: {
 		    	    'Content-Type': 'application/json'
@@ -532,14 +532,14 @@ function Option_Block_Unban(tempData,sdk) {
                     comments.forEach(comment_data => {
                         const comment_id = comment_data.comment_id;
                         if(comment_id === tempData.comment_id) {
-                            Lbry.channel_sign({channel_id: window.localStorage.getItem('claim_id'), hexdata: toHex(comment_id)})
+                            Lbry.channel_sign({channel_id: window.localStorage.getItem('ChannelClaimId'), hexdata: toHex(comment_id)})
                             .then(signed => {
                                 fetch(`https://comments.odysee.com/api/v2?m=moderation.UnBlock`, {
 		                            method: 'post',
 		                            headers: {
 			                            'Content-Type': 'application/json'
 		                            },
-                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.UnBlock", "params":{ "mod_channel_id":"${window.localStorage.getItem('claim_id')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "global_un_block":false, "un_blocked_channel_id":"${tempData.id}", "un_blocked_channel_name":"${tempData.name}" } }`
+                                    body: `{ "jsonrpc":"2.0", "id":1, "method":"moderation.UnBlock", "params":{ "mod_channel_id":"${window.localStorage.getItem('ChannelClaimId')}", "mod_channel_name":"${info.items[0].name}", "signature": "${signed.signature}", "signing_ts": "${signed.signing_ts}" "global_un_block":false, "un_blocked_channel_id":"${tempData.id}", "un_blocked_channel_name":"${tempData.name}" } }`
 	                            })
                                 .then(res => res.json())
                                 .then(res => {

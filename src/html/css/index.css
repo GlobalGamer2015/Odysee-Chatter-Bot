@@ -71,20 +71,15 @@ button.nav-link-embeddedcommand {
 li.nav-item {
 	margin-top: 4px;
 }
-li.nav-item.logout {
+li.nav-item.bmac {
 	margin-top: 4px;
 	position: absolute;
 	right: 10px;
 }
-li.nav-item.bmac {
-	margin-top: 4px;
-	position: absolute;
-	right: 80px;
-}
 li.nav-item.lbc {
 	margin-top: 4px;
 	position: absolute;
-	right: 210px;
+	right: 140px;
 }
 li.nav-item.name {
 	margin-top: 4px;
@@ -100,6 +95,11 @@ li.nav-item.settings {
 	margin-top: 4px;
 	position: absolute;
 	right: 40%;
+}
+li.nav-item.livestreams {
+	margin-top: 4px;
+	position: absolute;
+	right: 30%;
 }
 nav.navbar {
 	background-color: #241c30;
@@ -536,4 +536,12 @@ span.livestream-superchat__amount {
 	.superchats_wrapper {
 		top: -30px;
 	}
+}
+
+input#connect.form-control {
+	background-color: #181021;
+	border-radius: 25px;
+	padding: 6px;
+	color: white;
+	margin-right: 5px;
 }

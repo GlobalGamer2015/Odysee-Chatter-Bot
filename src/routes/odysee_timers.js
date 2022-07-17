@@ -4,7 +4,7 @@ const minute = 60000;
 const Alert = require('./alert')
 const process = require('process');
 
-module.exports = function(claimid, Claim_Id, Api_Key) {
+module.exports = function(claimid, ChannelClaimId) {
     setInterval(function() {
         fs.readdir(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/commands`, function(err, commands) {
             if(err) {
@@ -32,7 +32,7 @@ module.exports = function(claimid, Claim_Id, Api_Key) {
                         
                                 setTimeout(function() {
                                     try {
-                                        API.createComment(commandInformationParsed.reply, claimid, Claim_Id, Api_Key);
+                                        API.createComment(commandInformationParsed.reply, claimid, ChannelClaimId);
                                         fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/commands/Command_${commandInformationParsed.name}.json`, 'utf8', function(err, commandInformation2) {
                                             if(err) {
                                                 Alert.ShowErrorMessage(err)
