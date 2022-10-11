@@ -69,34 +69,34 @@
                 	else if(event.user == "user"){
                     	message.innerHTML += `<div id="comment" name="${event.comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.username}" data-streamer-id="${event.channel.replace(`lbry://${event.username}#`, '')}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${event.username}</a>: ${event.message}</div>`;
                 	}
-								}
+				}
 
-							const tutorialMessage = document.getElementById("tutorial");
-							if(tutorialMessage) {
-								tutorialMessage.remove();
-							}
+				const tutorialMessage = document.getElementById("tutorial");
+				if(tutorialMessage) {
+					tutorialMessage.remove();
+				}
             });
 
-						window.addEventListener('storage', function(e) {
-							console.log(e)
-							if(e.key === "removeComment") {
-								if(e.oldValue !== e.newValue) {
-									document.getElementsByName(e.newValue).forEach(value_element => {
-										value_element.remove()
-									})
-									removeComment(e.newValue)
-								}
-							}
+			window.addEventListener('storage', function(e) {
+				console.log(e)
+				if(e.key === "removeComment") {
+					if(e.oldValue !== e.newValue) {
+						document.getElementsByName(e.newValue).forEach(value_element => {
+							value_element.remove()
 						})
+						removeComment(e.newValue)
+					}
+				}
+			})
 
-						document.addEventListener('DOMContentLoaded', function() {
-							const chat = document.getElementById("input-chat");
-							chat.addEventListener("keyup", function(event) {
-								if(event.key === "Enter") {
-								SendMessageFromChat(chat)
-							}
-						})
-					})
+			document.addEventListener('DOMContentLoaded', function() {
+				const chat = document.getElementById("input-chat");
+				chat.addEventListener("keyup", function(event) {
+					if(event.key === "Enter") {
+						SendMessageFromChat(chat)
+					}
+				})
+			})
         </script>
 	</head>
 	<body onload="readChatHistory(), ReadChatPage_Language(), Reaction(), SubCount(), Viewers(), StreamViews(), SuperChat(), Chat_Interacter()">
