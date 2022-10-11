@@ -1313,7 +1313,7 @@ function Chat_Interacter() {
     .then(status => {
         if(status.is_running === true) {
             // LBRY App or LBRYnet is active.
-            chat.value = "Send message here.";
+            //chat.value = "Send message here.";
         }
     }).
     catch(e => {
@@ -1330,7 +1330,7 @@ function Chat_Interacter() {
         .then(status => {
             if(status.is_running === true) {
                 // LBRY App or LBRYnet is active.
-                chat.value = "Send message here.";
+                //chat.value = "Send message here.";
                 chat.style.pointerEvents = "all";
                 document.getElementById('input-chat-send').style.pointerEvents = "all";
             }
