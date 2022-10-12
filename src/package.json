@@ -76,7 +76,6 @@
 		"releaseDraft": false
 	},
 	"build": {
-		"afterPack": "./build/AfterPackHook.js",
 		"appId": "com.GG2015.OdyseeChatterBot",
 		"extraFiles": [
 			{
