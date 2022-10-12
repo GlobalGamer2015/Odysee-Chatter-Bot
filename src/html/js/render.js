@@ -1,18 +1,3 @@
-/*const { ipcRenderer } = require('electron/renderer');
-ipcRenderer.on('user_info', function(event, message) {
-    window.localStorage.setItem('nickname', `${message.user.nickname}`);
-	window.localStorage.setItem('name', `${message.user.name}`);
-	window.localStorage.setItem('picture', `${message.user.picture}`);
-	window.localStorage.setItem('updated_at', `${message.user.updated_at}`);
-	window.localStorage.setItem('email', `${message.user.email}`);
-	window.localStorage.setItem('email_verified', `${message.user.email_verified}`);
-	window.localStorage.setItem('sub', `${message.user.sub}`);
-	window.localStorage.setItem('api_key', `${message.user.api_key}`);
-	window.localStorage.setItem('claim_id', `${message.user.claim_id}`);
-    window.localStorage.setItem('app_version', `${message.user.app_version}`);
-    window.localStorage.setItem('sub_count', `${message.user.sub_count}`);
-})*/
-
 function popupWindow(html) {
     const name = html.getAttribute('data-streamer-name');
     const id = html.getAttribute('data-streamer-id');
@@ -381,12 +366,11 @@ function addTip(comment) {
     const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
 
     const { Lbry } = require('lbry-sdk-node/lbry');
-    Lbry.claim_search({claim_id: user_claim_id})
+    Lbry.claim_search({claim_id: channel_id})
 	.catch((e) => {
 		console.log(e)
 	})
 	.then(channel => {
-        console.log(channel)
         const thumbnail = channel.channel.items[0].value.thumbnail.url;
         const superchats_wrapper = document.getElementById("livestream-superchats__inner");
 
@@ -572,180 +556,175 @@ function readChatHistory() {
 
                 // Get Channel Information
                 const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-                Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
-				.catch((e) => {
-					console.log(e)
-				})
-                /*const body = { 
-                    api_key: window.localStorage.getItem('api_key')
-                }
-                fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
-  		            method: 'POST',
-  		            headers: { 'Content-Type': 'application/json' },
-  		            body: JSON.stringify(body)
-	            })
-	            .then(res => res.json())*/
-	            .then(channel => {
-                    // Load to messageContainer
-                    const streamer = channel.items[0].name;
-                    const messages = chatData.messages;
+
+                const fs = require('fs');
+                fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+                    if(err) {
+                        swal({
+                            title: "Error",
+                            text: `Please screenshot this error and report it:\n\n${err}`,
+                            icon: "error"
+                        });
+                    }
+                    let user_data = JSON.parse(user);
+
+                    Lbry.claim_search({claim_id: user_data.channel_claim_id})
+				    .catch((e) => {
+					    console.log(e)
+				    })
+                    
+	                .then(channel => {
+                        // Load to messageContainer
+                        const streamer = channel.items[0].name;
+                        const messages = chatData.messages;
                 
-                    const messageContainer = document.getElementById("messageContainer");
+                        const messageContainer = document.getElementById("messageContainer");
 
-                    messages.forEach(message => {
-                        const channel_id = message.channel_id;
-                        const channel_name = message.channel_name;
-                        const channel_url = message.channel_url;
-                        const comment = message.comment;
-                        const comment_id = message.comment_id;
-                        const currency = message.currency;
-                        const is_fiat = message.is_fiat;
-                        const is_hidden = message.is_hidden;
-                        const is_pinned = message.is_pinned;
-                        const signature = message.signature;
-                        const signing_ts = message.signing_ts;
-                        const support_amount = message.support_amount;
-                        const timestamp = message.timestamp;
+                        messages.forEach(message => {
+                            const channel_id = message.channel_id;
+                            const channel_name = message.channel_name;
+                            const channel_url = message.channel_url;
+                            const comment = message.comment;
+                            const comment_id = message.comment_id;
+                            const currency = message.currency;
+                            const is_fiat = message.is_fiat;
+                            const is_hidden = message.is_hidden;
+                            const is_pinned = message.is_pinned;
+                            const signature = message.signature;
+                            const signing_ts = message.signing_ts;
+                            const support_amount = message.support_amount;
+                            const timestamp = message.timestamp;
 
-                        const url = channel_url;
-                        const url_odysee = url.split("lbry://")
-                        const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
+                            const url = channel_url;
+                            const url_odysee = url.split("lbry://")
+                            const url_odysee_complete = `https://odysee.com/${url_odysee[1]}`;
 
-                        Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
-				        .catch((e) => {
-					        console.log(e)
-				        })
-                        /*const body = { 
-                            api_key: window.localStorage.getItem('api_key'),
-                            user_claim_id: channel_id
-                        }
-                        fetch(`https://www.odysee-chatter.com/api/getSuperChannelInformation`, {
-  		                    method: 'POST',
-  		                    headers: { 'Content-Type': 'application/json' },
-  		                    body: JSON.stringify(body)
-	                    })
-	                    .then(res => res.json())*/
-	                    .then(channel => {
-                            const thumbnail = channel.items[0].value.thumbnail.url;
-                            const superchats_wrapper = document.getElementById("livestream-superchats__inner");
+                            Lbry.claim_search({claim_id: channel_id})
+				            .catch((e) => {
+					            console.log(e)
+				            })
+	                        .then(channel => {
+                                const thumbnail = channel.items[0].value.thumbnail.url;
+                                const superchats_wrapper = document.getElementById("livestream-superchats__inner");
 
-                            if(support_amount) {
-                                checkChannelNameLength(channel_name)
+                                if(support_amount) {
+                                    checkChannelNameLength(channel_name)
 
-                                superchats_wrapper.innerHTML += `
-				                <div id="livestream-superchat" class="livestream-superchat">
-					                <div class="livestream-superchat__thumbnail">
-						                <div class="channel-thumbnail freezeframe-wrapper">
-							                <!-- Channel Thumbnail -->
-							                <div class="ff-container ff-responsive ff-ready ff-inactive">
-								                <!--<canvas class="ff-canvas ff-canvas-ready" width="32" height="32"></canvas>-->
-								                <img data-src="${thumbnail}" class="freezeframe-img ff-image" src="${thumbnail}">
-							                </div>
-						                </div>
-					                </div>
-					                <div class="livestream-superchat__info">
-    						            <!-- User / User URL -->
-	    					            <a class="button button--no-style button--uri-indicator" aria-hidden="false" tabindex="0" href="${url_odysee_complete}">
-		    					            <span class="button__content">
-			    					            <span dir="auto" class="channel-name">${new_channel_name}</span>
-				    			            </span>
-					    	            </a>
-						                <!-- Credit Icon & Amount -->
-						                <span class="livestream-superchat__amount">
-							                <span class="credit-amount">
-								                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" class="icon icon--LBC icon__lbc icon__lbc--after-text" aria-hidden="true">
-									                <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black"></path>
-									                <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black"></path>
-									                <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="black"></path>
-									                <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="url(#paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="url(#paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z" fill="url(#paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z" fill="url(#paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <defs><linearGradient id="paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="3.7206" y1="14.2649" x2="15.1645" y2="14.2649" gradientUnits="userSpaceOnUse"><stop offset="0.2464" stop-color="#E700FF"></stop><stop offset="0.3166" stop-color="#E804F9"></stop><stop offset="0.4108" stop-color="#E90EE8"></stop><stop offset="0.5188" stop-color="#EC1FCC"></stop><stop offset="0.637" stop-color="#F037A5"></stop><stop offset="0.7635" stop-color="#F45672"></stop><stop offset="0.8949" stop-color="#FA7A36"></stop><stop offset="1" stop-color="#FF9B00"></stop></linearGradient><linearGradient id="paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="2.60274" y1="8.40089" x2="15.14" y2="8.40089" gradientUnits="userSpaceOnUse"><stop offset="0.4233" stop-color="#FABD09"></stop><stop offset="0.8292" stop-color="#FA6B00"></stop></linearGradient><linearGradient id="paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="6.8682" y1="14.1738" x2="25.405" y2="4.84055" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><linearGradient id="paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="25.2522" y1="6.08799" x2="3.87697" y2="27.836" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><clipPath id="clip0"><rect width="24" height="24" fill="white"></rect></clipPath></defs>
-								                </svg>${support_amount}
-							                </span>
-						                </span>
-					                </div>
-				                </div>`;
-                            }
-                            if(currency) {
-                                superchats_wrapper.innerHTML += `
-				                <div id="livestream-superchat" class="livestream-superchat">
-					                <div class="livestream-superchat__thumbnail">
-						                <div class="channel-thumbnail freezeframe-wrapper">
-							                <!-- Channel Thumbnail -->
-							                <div class="ff-container ff-responsive ff-ready ff-inactive">
-								                <!--<canvas class="ff-canvas ff-canvas-ready" width="32" height="32"></canvas>-->
-								                <img data-src="${thumbnail}" class="freezeframe-img ff-image" src="${thumbnail}">
-							                </div>
-						                </div>
-					                </div>
-					                <div class="livestream-superchat__info">
-						                <!-- User / User URL -->
-						                <a class="button button--no-style button--uri-indicator" aria-hidden="false" tabindex="0" href="${url_odysee_complete}">
-							                <span class="button__content">
-								                <span dir="auto" class="channel-name">${new_channel_name}</span>
-							                </span>
-						                </a>
-						                <!-- Credit Icon & Amount -->
-						                <span class="livestream-superchat__amount">
-							                <span class="credit-amount">
-								                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" class="icon icon--LBC icon__lbc icon__lbc--after-text" aria-hidden="true">
-									                <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black"></path>
-									                <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black"></path>
-									                <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="black"></path>
-									                <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="url(#paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="url(#paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z" fill="url(#paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <path d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z" fill="url(#paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
-									                <defs><linearGradient id="paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="3.7206" y1="14.2649" x2="15.1645" y2="14.2649" gradientUnits="userSpaceOnUse"><stop offset="0.2464" stop-color="#E700FF"></stop><stop offset="0.3166" stop-color="#E804F9"></stop><stop offset="0.4108" stop-color="#E90EE8"></stop><stop offset="0.5188" stop-color="#EC1FCC"></stop><stop offset="0.637" stop-color="#F037A5"></stop><stop offset="0.7635" stop-color="#F45672"></stop><stop offset="0.8949" stop-color="#FA7A36"></stop><stop offset="1" stop-color="#FF9B00"></stop></linearGradient><linearGradient id="paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="2.60274" y1="8.40089" x2="15.14" y2="8.40089" gradientUnits="userSpaceOnUse"><stop offset="0.4233" stop-color="#FABD09"></stop><stop offset="0.8292" stop-color="#FA6B00"></stop></linearGradient><linearGradient id="paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="6.8682" y1="14.1738" x2="25.405" y2="4.84055" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><linearGradient id="paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="25.2522" y1="6.08799" x2="3.87697" y2="27.836" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><clipPath id="clip0"><rect width="24" height="24" fill="white"></rect></clipPath></defs>
-								                </svg>${currency}
-							                </span>
-						                </span>
-					                </div>
-				                </div>`;
-                            }
-                        })
+                                    superchats_wrapper.innerHTML += `
+				                    <div id="livestream-superchat" class="livestream-superchat">
+					                    <div class="livestream-superchat__thumbnail">
+						                    <div class="channel-thumbnail freezeframe-wrapper">
+							                    <!-- Channel Thumbnail -->
+							                    <div class="ff-container ff-responsive ff-ready ff-inactive">
+								                    <!--<canvas class="ff-canvas ff-canvas-ready" width="32" height="32"></canvas>-->
+								                    <img data-src="${thumbnail}" class="freezeframe-img ff-image" src="${thumbnail}">
+							                    </div>
+						                    </div>
+					                    </div>
+					                    <div class="livestream-superchat__info">
+    						                <!-- User / User URL -->
+	    					                <a class="button button--no-style button--uri-indicator" aria-hidden="false" tabindex="0" href="${url_odysee_complete}">
+		    					                <span class="button__content">
+			    					                <span dir="auto" class="channel-name">${new_channel_name}</span>
+				    			                </span>
+					    	                </a>
+						                    <!-- Credit Icon & Amount -->
+						                    <span class="livestream-superchat__amount">
+							                    <span class="credit-amount">
+								                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" class="icon icon--LBC icon__lbc icon__lbc--after-text" aria-hidden="true">
+									                    <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="url(#paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="url(#paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z" fill="url(#paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z" fill="url(#paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <defs><linearGradient id="paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="3.7206" y1="14.2649" x2="15.1645" y2="14.2649" gradientUnits="userSpaceOnUse"><stop offset="0.2464" stop-color="#E700FF"></stop><stop offset="0.3166" stop-color="#E804F9"></stop><stop offset="0.4108" stop-color="#E90EE8"></stop><stop offset="0.5188" stop-color="#EC1FCC"></stop><stop offset="0.637" stop-color="#F037A5"></stop><stop offset="0.7635" stop-color="#F45672"></stop><stop offset="0.8949" stop-color="#FA7A36"></stop><stop offset="1" stop-color="#FF9B00"></stop></linearGradient><linearGradient id="paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="2.60274" y1="8.40089" x2="15.14" y2="8.40089" gradientUnits="userSpaceOnUse"><stop offset="0.4233" stop-color="#FABD09"></stop><stop offset="0.8292" stop-color="#FA6B00"></stop></linearGradient><linearGradient id="paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="6.8682" y1="14.1738" x2="25.405" y2="4.84055" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><linearGradient id="paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="25.2522" y1="6.08799" x2="3.87697" y2="27.836" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><clipPath id="clip0"><rect width="24" height="24" fill="white"></rect></clipPath></defs>
+								                    </svg>${support_amount}
+							                    </span>
+						                    </span>
+					                    </div>
+				                    </div>`;
+                                }
+                                if(currency) {
+                                    superchats_wrapper.innerHTML += `
+				                    <div id="livestream-superchat" class="livestream-superchat">
+					                    <div class="livestream-superchat__thumbnail">
+						                    <div class="channel-thumbnail freezeframe-wrapper">
+							                    <!-- Channel Thumbnail -->
+							                    <div class="ff-container ff-responsive ff-ready ff-inactive">
+								                    <!--<canvas class="ff-canvas ff-canvas-ready" width="32" height="32"></canvas>-->
+								                    <img data-src="${thumbnail}" class="freezeframe-img ff-image" src="${thumbnail}">
+							                    </div>
+						                    </div>
+					                    </div>
+					                    <div class="livestream-superchat__info">
+						                    <!-- User / User URL -->
+						                    <a class="button button--no-style button--uri-indicator" aria-hidden="false" tabindex="0" href="${url_odysee_complete}">
+							                    <span class="button__content">
+								                    <span dir="auto" class="channel-name">${new_channel_name}</span>
+							                    </span>
+						                    </a>
+						                    <!-- Credit Icon & Amount -->
+						                    <span class="livestream-superchat__amount">
+							                    <span class="credit-amount">
+								                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="0" stroke-linecap="round" stroke-linejoin="round" class="icon icon--LBC icon__lbc icon__lbc--after-text" aria-hidden="true">
+									                    <path d="M1.03125 14.1562V9.84375L12 0L22.9688 9.84375V14.1562L12 24L1.03125 14.1562Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="black"></path>
+									                    <path d="M8.925 10.3688L3.99375 14.8125L7.70625 18.15L12.6375 13.7063L8.925 10.3688Z" fill="url(#paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M8.925 10.3688L15.1312 4.80005L12 1.98755L2.60625 10.425V13.575L3.99375 14.8125L8.925 10.3688Z" fill="url(#paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M15.075 13.6313L20.0062 9.1876L16.2937 5.8501L11.3625 10.2938L15.075 13.6313Z" fill="url(#paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <path d="M15.075 13.6312L8.86875 19.2L12 22.0125L21.3937 13.575V10.425L20.0062 9.1875L15.075 13.6312Z" fill="url(#paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4)"></path>
+									                    <defs><linearGradient id="paint0_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="3.7206" y1="14.2649" x2="15.1645" y2="14.2649" gradientUnits="userSpaceOnUse"><stop offset="0.2464" stop-color="#E700FF"></stop><stop offset="0.3166" stop-color="#E804F9"></stop><stop offset="0.4108" stop-color="#E90EE8"></stop><stop offset="0.5188" stop-color="#EC1FCC"></stop><stop offset="0.637" stop-color="#F037A5"></stop><stop offset="0.7635" stop-color="#F45672"></stop><stop offset="0.8949" stop-color="#FA7A36"></stop><stop offset="1" stop-color="#FF9B00"></stop></linearGradient><linearGradient id="paint1_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="2.60274" y1="8.40089" x2="15.14" y2="8.40089" gradientUnits="userSpaceOnUse"><stop offset="0.4233" stop-color="#FABD09"></stop><stop offset="0.8292" stop-color="#FA6B00"></stop></linearGradient><linearGradient id="paint2_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="6.8682" y1="14.1738" x2="25.405" y2="4.84055" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><linearGradient id="paint3_linearee5d7864-d630-4278-a1d0-c3040f0de2c4" x1="25.2522" y1="6.08799" x2="3.87697" y2="27.836" gradientUnits="userSpaceOnUse"><stop stop-color="#BAFF8E"></stop><stop offset="0.6287" stop-color="#008EBB"></stop></linearGradient><clipPath id="clip0"><rect width="24" height="24" fill="white"></rect></clipPath></defs>
+								                    </svg>${currency}
+							                    </span>
+						                    </span>
+					                    </div>
+				                    </div>`;
+                                }
+                            })
 
-                        var ts = require('user-timezone');
-                        var timeFormat = 'h:mm:ss A';
-			            var time = ts.datetime(timestamp, timeFormat);
+                            var ts = require('user-timezone');
+                            var timeFormat = 'h:mm:ss A';
+			                var time = ts.datetime(timestamp, timeFormat);
 
-				        const creator_tools_button_image = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon--MoreVertical" aria-hidden="true"><g><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></g></svg>';
-                        const streamer_image = `<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15" height="15" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>`;
+				            const creator_tools_button_image = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon--MoreVertical" aria-hidden="true"><g><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></g></svg>';
+                            const streamer_image = `<svg size="16" class="icon icon--BadgeStreamer" aria-hidden="true" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15" height="15" viewBox="-1182 401 24 24" xml:space="preserve"><style type="text/css">.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}</style><path class="st0" d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"></path><path class="st0" d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"></path><path class="st1" d="M-1163.7,419.4"></path><path class="st1" d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"></path><path class="st2" d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"></path><path class="st3" d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"></path></svg>`;
 
-                        if(comment.startsWith("<stkr>")) {
-                            const sticker = comment.replace("<stkr>", "").replace("<stkr>", "");
+                            if(comment.startsWith("<stkr>")) {
+                                const sticker = comment.replace("<stkr>", "").replace("<stkr>", "");
                             
-                            if(channel_name === streamer){
-                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                                if(channel_name === streamer){
+                                    messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                                }
+                                // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                                //else if(event.user == "moderator"){
+                                //  message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${getStickerImage(sticker)}</div>`;
+                                //}
+                                else if(channel_name !== streamer) {
+                                    messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                                }
                             }
-                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
-                            //else if(event.user == "moderator"){
-                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${getStickerImage(sticker)}</div>`;
-                            //}
-                            else if(channel_name !== streamer) {
-                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${getStickerImage(sticker)}</div>`;
+                            else {
+                                if(channel_name === streamer){
+                                    messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
+                                }
+                                // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
+                                //else if(event.user == "moderator"){
+                                //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
+                                //}
+                                else if(channel_name !== streamer) {
+                                    messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
+                                }
                             }
-                        }
-                        else {
-                            if(channel_name === streamer){
-                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="streamer" href="${url_odysee_complete}">${streamer_image} ${channel_name}</a>: ${comment}</div>`;
-                            }
-                            // is_moderator & is_streamer is not implemented in https://comments.lbry.com/api 
-                            //else if(event.user == "moderator"){
-                            //    message.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${event.time}</span><button class="menu__button" data-streamer-name="${event.channel_name}" data-streamer-id="${event.channel_id}" data-streamer-comment-id="${event.comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="moderator" href="${url_odysee_complete}">Moderator ${event.username}</a>: ${event.message}</div>`;
-                            //}
-                            else if(channel_name !== streamer) {
-                                messageContainer.innerHTML += `<div id="comment" name="${comment_id}"><span id="time">${time}</span><button class="menu__button" data-streamer-name="${channel_name}" data-streamer-id="${channel_id}" data-streamer-comment-id="${comment_id}" onclick="popupWindowDatapasser(this)" type="button">${creator_tools_button_image}</button><a id="user" href="${url_odysee_complete}">${channel_name}</a>: ${comment}</div>`;
-                            }
-                        }
 
-                        // Check if is there and remove
-				        const tutorialMessage = document.getElementById("tutorial");
-				        if(tutorialMessage) {
-					        tutorialMessage.remove();
-				        }
+                            // Check if is there and remove
+				            const tutorialMessage = document.getElementById("tutorial");
+				            if(tutorialMessage) {
+					            tutorialMessage.remove();
+				            }
+                        })
                     })
                 })
             })
@@ -934,45 +913,58 @@ function OdyseeBackendStatus() {
 
 function Reaction() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
-        method: 'get'
-    })
-    .then(res => res.json())
-    .then(json => {
-		const stream_claim_id = json.data[0].claim_id;
+    const fs = require('fs');
 
-        var data = {
-            'auth_token': '2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ',
-            'claim_ids': `${stream_claim_id}`
+    fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+        if(err) {
+            swal({
+                title: "Error",
+                text: `Please screenshot this error and report it:\n\n${err}`,
+                icon: "error"
+            });
         }
-        var formBody = [];
-        for (var property in data) {
-            var encodedKey = encodeURIComponent(property);
-            var encodedValue = encodeURIComponent(data[property]);
-            formBody.push(encodedKey + "=" + encodedValue);
-        }
-        formBody = formBody.join("&");
+        let user_data = JSON.parse(user);
 
-        function loop(formBody) {
-            fetch(`https://api.odysee.com/reaction/list`, {
-		        method: 'post',
-	    	    headers: {
-    			    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-		        },
-                body: formBody
-	        })
-	        .then(res => res.json())
-	        .then(json => {
-                document.getElementById('reaction_likes').innerText = json.data.others_reactions[stream_claim_id].like;
-                document.getElementById('reaction_dislikes').innerText = json.data.others_reactions[stream_claim_id].dislike
-	        })
-        }
-        loop(formBody)
-            
-        setInterval(function() {
+        fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + user_data.channel_claim_id + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+            method: 'get'
+        })
+        .then(res => res.json())
+        .then(json => {
+		    const stream_claim_id = json.data[0].claim_id;
+
+            var data = {
+                'auth_token': '2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ',
+                'claim_ids': `${stream_claim_id}`
+            }
+            var formBody = [];
+            for (var property in data) {
+                var encodedKey = encodeURIComponent(property);
+                var encodedValue = encodeURIComponent(data[property]);
+                formBody.push(encodedKey + "=" + encodedValue);
+            }
+            formBody = formBody.join("&");
+
+            function loop(formBody) {
+                fetch(`https://api.odysee.com/reaction/list`, {
+		            method: 'post',
+	    	        headers: {
+    			        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+		            },
+                    body: formBody
+	            })
+	            .then(res => res.json())
+	            .then(json => {
+                    document.getElementById('reaction_likes').innerText = json.data.others_reactions[stream_claim_id].like;
+                    document.getElementById('reaction_dislikes').innerText = json.data.others_reactions[stream_claim_id].dislike
+	            })
+            }
             loop(formBody)
-        },180000)
-	})
+            
+            setInterval(function() {
+                loop(formBody)
+            },180000)
+	    })
+    })
 }
 
 function SubCount() {
@@ -981,40 +973,52 @@ function SubCount() {
     const message = document.getElementById("messageContainer");
 
     function loop() {
-        fetch(`https://api.odysee.com/subscription/sub_count?auth_token=2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ&claim_id=${window.localStorage.getItem('ChannelClaimId')}`, {
-		    method: 'get',
-		    headers: {
-			    'Content-Type': 'application/json'
-		    }
-	    })
-	    .then(res => res.json())
-	    .then(json => {
-            if(json.data[0] !== window.localStorage.getItem('sub_count')) {
-                const subCount = json.data[0] - window.localStorage.getItem('sub_count');
-                if(subCount >= 1) {
-                    if(subCount === 1) {
-                        document.getElementById('followers').innerText = json.data[0];
-                        window.localStorage.setItem('sub_count', json.data[0])
-                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} follower within the last 1 minute.</div>`;
-                    }
-                    else {
-                        document.getElementById('followers').innerText = json.data[0];
-                        window.localStorage.setItem('sub_count', json.data[0])
-                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} followers within the last 1 minute.</div>`;
-                    }
-                }
-                /*else {
-                    if(subCount === 0) {
-                        // console.log('lost 1 follower or none')
-                    }
-                    else {
-                        document.getElementById('followers').innerText = json.data[0];
-                        window.localStorage.setItem('sub_count', json.data[0])
-                        message.innerHTML += `<div id="comment"><a id="user">System</a>: You lost ${subCount} followers within the last 1 minute.</div>`;
-                    }
-                }*/
+        const fs = require('fs');
+
+        fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+            if(err) {
+                swal({
+                    title: "Error",
+                    text: `Please screenshot this error and report it:\n\n${err}`,
+                    icon: "error"
+                });
             }
-	    })
+            let user_data = JSON.parse(user);
+            fetch(`https://api.odysee.com/subscription/sub_count?auth_token=2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ&claim_id=${user_data.channel_claim_id}`, {
+		        method: 'get',
+		        headers: {
+			        'Content-Type': 'application/json'
+		        }
+	        })
+	        .then(res => res.json())
+	        .then(json => {
+                if(json.data[0] !== window.localStorage.getItem('sub_count')) {
+                    const subCount = json.data[0] - window.localStorage.getItem('sub_count');
+                    if(subCount >= 1) {
+                        if(subCount === 1) {
+                            document.getElementById('followers').innerText = json.data[0];
+                            window.localStorage.setItem('sub_count', json.data[0])
+                            message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} follower within the last 1 minute.</div>`;
+                        }
+                        else {
+                            document.getElementById('followers').innerText = json.data[0];
+                            window.localStorage.setItem('sub_count', json.data[0])
+                            message.innerHTML += `<div id="comment"><a id="user">System</a>: You gained ${subCount} followers within the last 1 minute.</div>`;
+                        }
+                    }
+                    /*else {
+                        if(subCount === 0) {
+                            // console.log('lost 1 follower or none')
+                        }
+                        else {
+                            document.getElementById('followers').innerText = json.data[0];
+                            window.localStorage.setItem('sub_count', json.data[0])
+                            message.innerHTML += `<div id="comment"><a id="user">System</a>: You lost ${subCount} followers within the last 1 minute.</div>`;
+                        }
+                    }*/
+                }
+	        })
+        })
     }
     
     setInterval(function() {
@@ -1023,17 +1027,20 @@ function SubCount() {
 }
 
 function Viewers() {
-    const fetch = require('node-fetch');
     const WS = require('ws');
+    const fs = require('fs');
 
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
-        method: 'get'
-    })
-    .then(res => res.json())
-    .then(json => {
-		const stream_claim_id = json.data[0].claim_id;
+    fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+        if(err) {
+            swal({
+                title: "Error",
+                text: `Please screenshot this error and report it:\n\n${err}`,
+                icon: "error"
+            });
+        }
+        let user_data = JSON.parse(user);
 
-        ws = new WS(`wss://sockety.odysee.com/ws/commentron?id=${stream_claim_id}&category=${stream_claim_id}`);
+        ws = new WS(`wss://sockety.odysee.com/ws/commentron?id=${user_data.stream_claim_id}&category=${user_data.stream_claim_id}`);
     
         ws.addEventListener('message', function (event) {
             try {
@@ -1052,12 +1059,19 @@ function Viewers() {
 
 function StreamViews() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
-        method: 'get'
-    })
-    .then(res => res.json())
-    .then(json => {
-		const stream_claim_id = json.data[0].claim_id;
+    const fs = require('fs');
+
+    fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+        if(err) {
+            swal({
+                title: "Error",
+                text: `Please screenshot this error and report it:\n\n${err}`,
+                icon: "error"
+            });
+        }
+        let user_data = JSON.parse(user);
+
+		const stream_claim_id = user_data.stream_claim_id;
 
         function loop(stream_claim_id) {
             fetch(`https://api.odysee.com/file/view_count?auth_token=2rWtnwCi2nMrurh7nJMZtmuG29aZ7FWQ&claim_id=${stream_claim_id}`, {
@@ -1081,12 +1095,19 @@ function StreamViews() {
 
 function SuperChat() {
     const fetch = require('node-fetch');
-    fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + window.localStorage.getItem('ChannelClaimId') + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
-        method: 'get'
-    })
-    .then(res => res.json())
-    .then(json => {
-		const stream_claim_id = json.data[0].claim_id;
+    const fs = require('fs');
+
+    fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+        if(err) {
+            swal({
+                title: "Error",
+                text: `Please screenshot this error and report it:\n\n${err}`,
+                icon: "error"
+            });
+        }
+        let user_data = JSON.parse(user);
+
+		const stream_claim_id = user_data.stream_claim_id;
 
         function loop(stream_claim_id) {
             fetch(`https://comments.odysee.com/api/v2?m=comment.SuperChatList`, {
@@ -1141,14 +1162,16 @@ function UpdateChat() {
 
         chatObject.messages = [];
 
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
-            method: 'get',
-            headers: {
-			    'Content-Type': 'application/json'
-		    }
-        })
-        .then(res => res.json())
-        .then(stream => {
+        fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+            if(err) {
+                swal({
+                    title: "Error",
+                    text: `Please screenshot this error and report it:\n\n${err}`,
+                    icon: "error"
+                });
+            }
+            let user_data = JSON.parse(user);
+        
             fetch('https://comments.lbry.com/api', {
                 method: 'post',
                 headers: {
@@ -1159,7 +1182,7 @@ function UpdateChat() {
                     "id": "null",
                     "method": "get_claim_comments",
                     "params": {
-                        "claim_id": "${stream.data[0].claim_id}",
+                        "claim_id": "${user_data.stream_claim_id}",
                         "page_size": 100,
                         "is_channel_signature_valid": true,
                         "visible": true
@@ -1222,17 +1245,10 @@ function UpdateChat() {
 
                 // Get Channel Information
                 const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
-                Lbry.claim_search({claim_id: localStorage.getItem('ChannelClaimId')})
+                Lbry.claim_search({claim_id: user_data.channel_claim_id})
 				.catch((e) => {
 					console.log(e)
 				})
-
-                /*fetch(`https://www.odysee-chatter.com/api/getChannelInformation`, {
-  		            method: 'POST',
-  		            headers: { 'Content-Type': 'application/json' },
-  		            body: JSON.stringify(body)
-	            })
-	            .then(res => res.json())*/
 	            .then(channel => {
                     // Load to messageContainer
                     const streamer = channel.items[0].name;
@@ -1359,15 +1375,19 @@ function SendMessageFromChat(chat) {
         const fetch = require('node-fetch')
         const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
         
-        fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
-            method: 'get',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-        })
-        .then(res => res.json())
-        .then(stream => {
-            Lbry.channel_sign({channel_id: localStorage.getItem('ChannelClaimId'), hexdata: toHex(chat.value)})
+        const fs = require('fs');
+
+        fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+            if(err) {
+                swal({
+                    title: "Error",
+                    text: `Please screenshot this error and report it:\n\n${err}`,
+                    icon: "error"
+                });
+            }
+            let user_data = JSON.parse(user);
+
+            Lbry.channel_sign({channel_id: user_data.channel_claim_id, hexdata: toHex(chat.value)})
 	        .catch((e) => {
 		        console.log(e)
 	        })
@@ -1382,9 +1402,9 @@ function SendMessageFromChat(chat) {
 				        "id":1,
 				        "method":"comment.Create",
 				        "params":{
-					        "channel_id":"${localStorage.getItem('ChannelClaimId')}",
-					        "channel_name":"${localStorage.getItem('ChannelClaimName')}",
-					        "claim_id":"${stream.data[0].claim_id}",
+					        "channel_id":"${user_data.channel_claim_id}",
+					        "channel_name":"${user_data.channel_claim_name}",
+					        "claim_id":"${user_data.stream_claim_id}",
 					        "comment":"${chat.value}",
 					        "signature": "${signed.signature}",
 					        "signing_ts": "${signed.signing_ts}"
@@ -1403,4 +1423,39 @@ function SendMessageFromChat(chat) {
     else {
         chat.value = "Message needs to be more than 1 character.";
     }
+}
+function SaveUserData(el) {
+    const fs = require('fs');
+    const fetch = require('node-fetch')
+
+    fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${el.ChannelClaimId.value}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
+        method: 'get',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+    })
+    .then(res => res.json())
+    .then(stream => {
+        let json = {
+            channel_claim_name: el.ChannelClaimName.value,
+            channel_normalized_name: el.ChannelNormalizedName.value,
+            channel_claim_address: el.ChannelClaimAddress.value,
+            channel_claim_id: el.ChannelClaimId.value,
+            channel_claim_url: el.ChannelClaimUrl.value,
+
+            stream_claim_title: stream.data[0].title,
+            stream_claim_address: stream.data[0].claim_address,
+            stream_claim_id: stream.data[0].claim_id,
+        }
+    
+        fs.writeFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, JSON.stringify(json), function(err) {
+            if(err) {
+                swal({
+                    title: "Error",
+                    text: `Please screenshot this error and report it:\n\n${err}`,
+                    icon: "error"
+                });
+            }
+        })
+    })
 }

@@ -35,7 +35,7 @@ module.exports = function(comment, claimid, ChannelClaimId) {
 
                     if(commandInformationParsed.type == "Command") {
                         if(msg == commandInformationParsed.name && commandInformationParsed.active == true) {
-                            API.createComment(commandInformationParsed.reply, claimid, ChannelClaimId);
+                            API.createComment(commandInformationParsed.reply);
                         }
                     }
                 })
@@ -61,7 +61,7 @@ module.exports = function(comment, claimid, ChannelClaimId) {
                                 var user = shoutout_user[1];
                             
                                 command_reply = command.reply.replace("<user>", user);
-                                API.createComment(command_reply, claimid, ChannelClaimId);
+                                API.createComment(command_reply);
                             }
                         }
                     }

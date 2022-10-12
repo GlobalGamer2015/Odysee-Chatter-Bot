@@ -32,7 +32,7 @@ module.exports = function(claimid, ChannelClaimId) {
                         
                                 setTimeout(function() {
                                     try {
-                                        API.createComment(commandInformationParsed.reply, claimid, ChannelClaimId);
+                                        API.createComment(commandInformationParsed.reply);
                                         fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/commands/Command_${commandInformationParsed.name}.json`, 'utf8', function(err, commandInformation2) {
                                             if(err) {
                                                 Alert.ShowErrorMessage(err)

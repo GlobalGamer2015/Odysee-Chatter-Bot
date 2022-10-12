@@ -76,11 +76,13 @@
 					if (yesorno) {
 					}
 					else {
-						localStorage.setItem('ChannelClaimAddress', el.ChannelClaimAddress.value)
-						localStorage.setItem('ChannelClaimName', el.ChannelClaimName.value)
-						localStorage.setItem('ChannelNormalizedName', el.ChannelNormalizedName.value)
-						localStorage.setItem('ChannelClaimId', el.ChannelClaimId.value)
-						localStorage.setItem('ChannelClaimUrl', el.ChannelClaimUrl.value)
+						SaveUserData(el);
+
+						//localStorage.setItem('ChannelClaimAddress', el.ChannelClaimAddress.value)
+						//localStorage.setItem('ChannelClaimName', el.ChannelClaimName.value)
+						//localStorage.setItem('ChannelNormalizedName', el.ChannelNormalizedName.value)
+						//localStorage.setItem('ChannelClaimId', el.ChannelClaimId.value)
+						//localStorage.setItem('ChannelClaimUrl', el.ChannelClaimUrl.value)
 
 						window.location = `/connecting?ChannelClaimUrl=${el.ChannelClaimId.value}`;
 					}

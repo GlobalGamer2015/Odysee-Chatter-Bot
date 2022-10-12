@@ -8,6 +8,13 @@ module.exports = function() {
                 Alert.ShowErrorMessage(err)
             }
             else {
+                if(!fs.existsSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`)) {
+                    fs.writeFileSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`,'{}', function(err) {
+                        if(err) {
+                            Alert.ShowErrorMessage(err)
+                        }
+                    })
+                }
                 fs.mkdir(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/`, function(err) {
                     if(err) {
                         Alert.ShowErrorMessage(err)
@@ -59,6 +66,13 @@ module.exports = function() {
         })
     }
     else {
+        if(!fs.existsSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`)) {
+            fs.writeFileSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`,'{}', function(err) {
+                if(err) {
+                    Alert.ShowErrorMessage(err)
+                }
+            })
+        }
         if(!fs.existsSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`)) {
             fs.writeFileSync(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/chat_history/chat.json`,'{"messages": []}', function(err) {
                 if(err) {

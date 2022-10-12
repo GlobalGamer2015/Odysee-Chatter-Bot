@@ -18,7 +18,7 @@ module.exports = function() {
 		}
 	}
 
-	function createComment(comment, stream_claimid, user_claimid, Api_Key) {
+	function createComment(comment) {
 		try {
 			const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
 			function toHex(str) { // Encoding function
@@ -30,15 +30,18 @@ module.exports = function() {
 				return result;
 			}
 
-			fetch(`https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22${window.localStorage.getItem('ChannelClaimId')}%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201`, {
-        method: 'get',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-      })
-      .then(res => res.json())
-      .then(stream => {
-				Lbry.channel_sign({channel_id: `${localStorage.getItem('ChannelClaimId')}`, hexdata: toHex(comment)}) // Your Bot Channel ID
+			const fs = require('fs');
+        	fs.readFile(`${process.env.LOCALAPPDATA}/Odysee Chatter Bot User Data/user.json`, 'utf8', function(err, user) {
+            	if(err) {
+                	swal({
+                    	title: "Error",
+                    	text: `Please screenshot this error and report it:\n\n${err}`,
+                    	icon: "error"
+                	});
+            	}
+            	let user_data = JSON.parse(user);
+
+				Lbry.channel_sign({channel_id: `${user_data.channel_claim_id}`, hexdata: toHex(comment)})
 				.catch((e) => {
 					console.log(e)
 				})
@@ -53,9 +56,9 @@ module.exports = function() {
 							"id":1,
 							"method":"comment.Create",
 							"params":{
-								"channel_id":"${localStorage.getItem('ChannelClaimId')}",
-								"channel_name":"${localStorage.getItem('ChannelClaimName')}",
-								"claim_id":"${stream.data[0].claim_id}",
+								"channel_id":"${user_data.channel_claim_id}",
+								"channel_name":"${user_data.channel_claim_name}",
+								"claim_id":"${user_data.stream_claim_id}",
 								"comment":"${comment}",
 								"signature": "${signed.signature}",
 								"signing_ts": "${signed.signing_ts}"
