@@ -347,13 +347,13 @@ function checkChannelNameLength(channel_name) {
     }
 }
 
-
-const io = require("socket.io-client");
+// Commenting out for now since its causing multiple issues.
+/*const io = require("socket.io-client");
 socket = io.connect("http://localhost:4187")
 socket.on('addTip', (event) => {
     var comment=JSON.parse(event.event.data);
     addTip(comment)
-})
+})*/
 function addTip(comment) {
 	const channel_id = comment.data.comment.channel_id;
 	const channel_name = comment.data.comment.channel_name;
