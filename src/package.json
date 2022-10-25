@@ -1,7 +1,7 @@
 {
 	"name": "odyseechatterbot",
 	"productName": "Odysee Chatter Bot",
-	"version": "1.11.2",
+	"version": "1.11.3",
 	"description": "Chat Bot Application for Odysee.",
 	"author": "GG2015",
 	"repository": {
@@ -12,14 +12,13 @@
 		"postinstall": "electron-builder install-app-deps",
 		"start": "electron .",
 		"prepack": "yarn electron-builder --dir",
-		"pack": "yarn electron-builder --prepackaged ./dist/win-unpacked --windows",
-		"browserify": "browserify ./html/js/lock.js -o ./html/js/lock_build.js"
+		"pack": "yarn electron-builder --prepackaged ./dist/win-unpacked --windows"
 	},
 	"dependencies": {
-		"@babel/core": "^7.14.6",
-		"@electron/remote": "^2.0.1",
+		"@electron/remote": "^2.0.8",
+		"@sentry/electron": "^4.1.0",
 		"ejs": "^3.1.6",
-		"electron-alert": "^0.1.16",
+		"electron-alert": "^0.1.13",
 		"electron-context-menu": "^3.0.0",
 		"electron-debug": "^3.2.0",
 		"electron-log": "^4.3.5",
@@ -33,9 +32,7 @@
 		"lbry-sdk-nodejs": "^0.101.0",
 		"node-fetch": "^2.6.1",
 		"pug": "^3.0.2",
-		"request": "^2.88.2",
 		"socket.io": "^4.1.2",
-		"socket.io-client": "^4.2.0",
 		"sweetalert": "^2.1.2",
 		"user-timezone": "^1.0.3",
 		"ws": "^7.4.6"
@@ -47,10 +44,10 @@
 		"babel-preset-stage-0": "^6.24.1",
 		"babelify": "^10.0.0",
 		"browserify": "^17.0.0",
-		"electron": "^13.5.1",
-		"electron-builder": "^22.11.4",
+		"electron": "^21.2.0",
+		"electron-builder": "^22.10.3",
 		"electron-squirrel-startup": "^1.0.0",
-		"np": "^7.5.0",
+		"np": "^7.6.2",
 		"xo": "^0.42.0"
 	},
 	"xo": {

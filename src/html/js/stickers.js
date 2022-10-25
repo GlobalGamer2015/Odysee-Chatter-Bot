@@ -71,5 +71,3 @@ function getStickerImage(image) {
     if(image === ":FORTUNE_CHEST:") {return "<img src='https://thumbnails.odycdn.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderfortunechest$_tip.png'></img>"}
     if(image === ":FORTUNE_CHEST_LBC:") {return "<img src='https://thumbnails.odycdn.com/optimize/s:0:100/quality:85/plain/https://static.odycdn.com/stickers/TIPS/png/with%20borderfortunechest_LBC_tip.png'></img>"}
 }
-
-module.exports.getStickerImage = getStickerImage;

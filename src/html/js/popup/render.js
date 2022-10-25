@@ -1,3 +1,6 @@
+const Sentry = require('@sentry/electron');
+Sentry.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+
 function toHex(str) {
     let s = unescape(encodeURIComponent(str));
     let result = '';

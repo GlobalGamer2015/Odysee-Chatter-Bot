@@ -1,49 +1,31 @@
+const Sentry = require('@sentry/electron');
+Sentry.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+
 function popupWindow(html) {
     const name = html.getAttribute('data-streamer-name');
     const id = html.getAttribute('data-streamer-id');
     const comment_id = html.getAttribute('data-streamer-comment-id');
 
     const { BrowserWindow } = require('@electron/remote')
-    const { is } = require('electron-util');
 
     let popupWindow;
-    if(is.development) {
-        popupWindow = new BrowserWindow({
-            show: false,
-            frame: true,
-            title: 'Creator Tools',
-            width: 600,
-            height: 650,
-            icon: null,
-            resizable: false,
-            transparent: true,
-            minimizable: false,
-            webPreferences: {
-                nodeIntegration: true,
-                contextIsolation: false,
-                enableRemoteModule: true,
-                nativeWindowOpen: true
-            }
-        })
-    }
-    else {
-        popupWindow = new BrowserWindow({
-            show: false,
-            frame: true,
-            title: 'Creator Tools',
-            width: 256,
-            height: 584,
-            icon: null,
-            resizable: false,
-            transparent: true,
-            minimizable: false,
-            webPreferences: {
-                nodeIntegration: true,
-                contextIsolation: false,
-                enableRemoteModule: true
-            }
-        })
-    }
+    
+    popupWindow = new BrowserWindow({
+        show: false,
+        frame: true,
+        title: 'Creator Tools',
+        width: 256,
+        height: 584,
+        icon: null,
+        resizable: false,
+        transparent: true,
+        minimizable: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true
+        }
+    })
     const win = BrowserWindow.getFocusedWindow().getPosition()
     popupWindow.setPosition(win[0]+150,win[1]+150)
     popupWindow.setMenuBarVisibility(false)
@@ -740,7 +722,7 @@ function readChatHistory() {
 }
 
 function version() {
-    var appVersion = window.localStorage.getItem('app_version');
+    const appVersion = require('@electron/remote').app.getVersion();
     document.getElementById("version").innerHTML = appVersion;
 }
 
@@ -1457,5 +1439,527 @@ function SaveUserData(el) {
                 });
             }
         })
+    })
+}
+
+/*
+
+*/
+
+// Livestream
+
+function GetStreams() {
+    const fetch = require('node-fetch');
+    var activeStreams = [];
+  
+    fetch('https://api.odysee.live/livestream/all', {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(api => api.json())
+    .then(api => {
+        if (api.success === true) {
+            const data = api.data;
+            data.forEach(function(claimId) {
+                activeStreams.push(claimId);
+            });
+
+            activeStreams.forEach(function(claimId) {
+                fetch("https://chainquery.lbry.com/api/sql?query=SELECT%20*%20FROM%20claim%20WHERE%20publisher_id=%22" + claimId.ChannelClaimID + "%22%20AND%20bid_state%3C%3E%22Spent%22%20AND%20claim_type=1%20AND%20source_hash%20IS%20NULL%20ORDER%20BY%20id%20DESC%20LIMIT%201", {
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(stream => stream.json())
+                .then(stream => {
+                    if(stream.data.length >= 1) {
+                        // Channel information
+                        const channel = claimId;
+                        const timestamp = channel.Start;
+                        const live = channel.Live;
+                        const channel_name = channel.ActiveClaim.CanonicalURL.replace('lbry://@', '').split('#')[0];
+                        const channelLink = channel.ActiveClaim.CanonicalURL.replace('lbry://@', 'https://odysee.com/@').split('#')[0];
+                        const stream_url = channel.ActiveClaim.CanonicalURL.replace('lbry://@', 'https://odysee.com/@');
+                        const viewCount = channel.ViewerCount;
+
+                        function language_data(language) {
+                            /*
+                                Uses language data from https://meta.wikimedia.org/wiki/Template:List_of_language_names_ordered_by_code
+                            */
+                            if(language == 'bo') { return 'Boro'; }
+                            if(language == 'aa') { return 'Afar'; }
+                            if(language == 'ab') { return 'Abkhazian'; }
+                            if(language == 'af') { return 'Afrikaans'; }
+                            if(language == 'ak') { return 'Akan'; }
+                            if(language == 'als') { return 'Alemannic'; }
+                            if(language == 'am') { return 'Amharic'; }
+                            if(language == 'an') { return 'Aragonese'; }
+                            if(language == 'ang') { return 'Angal'; }
+                            if(language == 'ar') { return 'Arabic'; }
+                            if(language == 'arc') { return 'Aramaic'; }
+                            if(language == 'as') { return 'Assamese'; }
+                            if(language == 'ast') { return 'Asturian'; }
+                            if(language == 'av') { return 'Avar'; }
+                            if(language == 'awa') { return 'Awadhi'; }
+                            if(language == 'ay') { return 'Aymara'; }
+                            if(language == 'az') { return 'Azerbaijani'; }
+                            if(language == 'ba') { return 'Bashkir'; }
+                            if(language == 'bar') { return 'Bavarian'; }
+                            if(language == 'bat-smg') { return 'Samogitian'; }
+                            if(language == 'bcl') { return 'Bikol'; }
+                            if(language == 'be') { return 'Belarusian'; }
+                            if(language == 'be-x-old') { return 'Belarusian (Taraškievica)'; }
+                            if(language == 'bg') { return 'Bulgarian'; }
+                            if(language == 'bh') { return 'Bihari'; }
+                            if(language == 'bi') { return 'Bislama'; }
+                            if(language == 'bm') { return 'Bambara'; }
+                            if(language == 'bn') { return 'Bengali'; }
+                            if(language == 'bo') { return 'Tibetan'; }
+                            if(language == 'bpy') { return 'Bishnupriya Manipuri'; }
+                            if(language == 'br') { return 'Breton'; }
+                            if(language == 'bs') { return 'Bosnian'; }
+                            if(language == 'bug') { return 'Buginese'; }
+                            if(language == 'bxr') { return 'Buriat (Russia)'; }
+                            if(language == 'ca') { return 'Catalan'; }
+                            if(language == 'cdo') { return 'Min Dong Chinese'; }
+                            if(language == 'ce') { return 'Chechen'; }
+                            if(language == 'ceb') { return 'Cebuano'; }
+                            if(language == 'ch') { return 'Chamorro'; }
+                            if(language == 'cho') { return 'Choctaw'; }
+                            if(language == 'chr') { return 'Cherokee'; }
+                            if(language == 'chy') { return 'Cheyenne'; }
+                            if(language == 'ckb') { return 'Kurdish (Sorani)'; }
+                            if(language == 'co') { return 'Corsican'; }
+                            if(language == 'cr') { return 'Cree'; }
+                            if(language == 'cs') { return 'Czech'; }
+                            if(language == 'csb') { return 'Kashubian'; }
+                            if(language == 'cu') { return 'Old Church Slavonic / Old Bulgarian'; }
+                            if(language == 'cv') { return 'Chuvash'; }
+                            if(language == 'cy') { return 'Welsh'; }
+                            if(language == 'da') { return 'Danish'; }
+                            if(language == 'de') { return 'German'; }
+                            if(language == 'diq') { return 'Dimli'; }
+                            if(language == 'dsb') { return 'Lower Sorbian'; }
+                            if(language == 'dv') { return 'Divehi'; }
+                            if(language == 'dz') { return 'Dzongkha'; }
+                            if(language == 'ee') { return 'Ewe'; }
+                            if(language == 'el') { return 'Greek'; }
+                            if(language == 'en') { return 'English'; }
+                            if(language == 'eo') { return 'Esperanto'; }
+                            if(language == 'es') { return 'Spanish'; }
+                            if(language == 'et') { return 'Estonian'; }
+                            if(language == 'eu') { return 'Basque'; }
+                            if(language == 'ext') { return 'Extremaduran'; }
+                            if(language == 'fa') { return 'Persian'; }
+                            if(language == 'ff') { return 'Peul'; }
+                            if(language == 'fi') { return 'Finnish'; }
+                            if(language == 'fiu-vro') { return 'Võro'; }
+                            if(language == 'fj') { return 'Fijian'; }
+                            if(language == 'fo') { return 'Faroese'; }
+                            if(language == 'fr') { return 'French'; }
+                            if(language == 'frp') { return 'Arpitan / Franco-Provençal'; }
+                            if(language == 'fur') { return 'Friulian'; }
+                            if(language == 'fy') { return 'West Frisian'; }
+                            if(language == 'ga') { return 'Irish'; }
+                            if(language == 'gan') { return 'Gan Chinese'; }
+                            if(language == 'gbm') { return 'Garhwali'; }
+                            if(language == 'gd') { return 'Scottish Gaelic'; }
+                            if(language == 'gil') { return 'Gilbertese'; }
+                            if(language == 'gl') { return 'Galician'; }
+                            if(language == 'gn') { return 'Guarani'; }
+                            if(language == 'got') { return 'Gothic'; }
+                            if(language == 'gu') { return 'Gujarati'; }
+                            if(language == 'gv') { return 'Manx'; }
+                            if(language == 'ha') { return 'Hausa'; }
+                            if(language == 'hak') { return 'Hakka Chinese'; }
+                            if(language == 'haw') { return 'Hawaiian'; }
+                            if(language == 'he') { return 'Hebrew'; }
+                            if(language == 'hi') { return 'Hindi'; }
+                            if(language == 'ho') { return 'Hiri Motu'; }
+                            if(language == 'hr') { return 'Croatian'; }
+                            if(language == 'ht') { return 'Haitian'; }
+                            if(language == 'hu') { return 'Hungarian'; }
+                            if(language == 'hy') { return 'Armenian'; }
+                            if(language == 'hz') { return 'Herero'; }
+                            if(language == 'ia') { return 'Interlingua'; }
+                            if(language == 'id') { return 'Indonesian'; }
+                            if(language == 'ie') { return 'Interlingue'; }
+                            if(language == 'ig') { return 'Igbo'; }
+                            if(language == 'ii') { return 'Sichuan Yi'; }
+                            if(language == 'ik') { return 'Inupiak'; }
+                            if(language == 'inh') { return 'Ingush'; }
+                            if(language == 'io') { return 'Ido'; }
+                            if(language == 'is') { return 'Icelandic'; }
+                            if(language == 'it') { return 'Italian'; }
+                            if(language == 'iu') { return 'Inuktitut'; }
+                            if(language == 'ja') { return 'Japanese'; }
+                            if(language == 'jbo') { return 'Lojban'; }
+                            if(language == 'jv') { return 'Javanese'; }
+                            if(language == 'ka') { return 'Georgian'; }
+                            if(language == 'kg') { return 'Kongo'; }
+                            if(language == 'ki') { return 'Kikuyu'; }
+                            if(language == 'kj') { return 'Kuanyama'; }
+                            if(language == 'kk') { return 'Kazakh'; }
+                            if(language == 'kl') { return 'Greenlandic'; }
+                            if(language == 'km') { return 'Cambodian'; }
+                            if(language == 'kn') { return 'Kannada'; }
+                            if(language == 'khw') { return 'Khowar'; }
+                            if(language == 'ko') { return 'Korean'; }
+                            if(language == 'kr') { return 'Kanuri'; }
+                            if(language == 'ks') { return 'Kashmiri'; }
+                            if(language == 'ksh') { return 'Ripuarian'; }
+                            if(language == 'ku') { return 'Kurdish (Kurmanji)'; }
+                            if(language == 'kv') { return 'Komi'; }
+                            if(language == 'kw') { return 'Cornish'; }
+                            if(language == 'ky') { return 'Kirghiz'; }
+                            if(language == 'la') { return 'Latin'; }
+                            if(language == 'lad') { return 'Ladino / Judeo-Spanish'; }
+                            if(language == 'lan') { return 'Lango'; }
+                            if(language == 'lb') { return 'Luxembourgish'; }
+                            if(language == 'lg') { return 'Ganda'; }
+                            if(language == 'li') { return 'Limburgian'; }
+                            if(language == 'lij') { return 'Ligurian'; }
+                            if(language == 'lmo') { return 'Lombard'; }
+                            if(language == 'ln') { return 'Lingala'; }
+                            if(language == 'lo') { return 'Laotian'; }
+                            if(language == 'lzz') { return 'Laz'; }
+                            if(language == 'lt') { return 'Lithuanian'; }
+                            if(language == 'lv') { return 'Latvian'; }
+                            if(language == 'map-bms') { return 'Banyumasan'; }
+                            if(language == 'mg') { return 'Malagasy'; }
+                            if(language == 'man') { return 'Mandarin'; }
+                            if(language == 'mh') { return 'Marshallese'; }
+                            if(language == 'mi') { return 'Maori'; }
+                            if(language == 'min') { return 'Minangkabau'; }
+                            if(language == 'mk') { return 'Macedonian'; }
+                            if(language == 'ml') { return 'Malayalam'; }
+                            if(language == 'mn') { return 'Mongolian'; }
+                            if(language == 'mo') { return 'Moldovan'; }
+                            if(language == 'mr') { return 'Marathi'; }
+                            if(language == 'mrh') { return 'Mara'; }
+                            if(language == 'ms') { return 'Malay'; }
+                            if(language == 'mt') { return 'Maltese'; }
+                            if(language == 'mus') { return 'Creek / Muskogee'; }
+                            if(language == 'mwl') { return 'Mirandese'; }
+                            if(language == 'my') { return 'Burmese'; }
+                            if(language == 'na') { return 'Nauruan'; }
+                            if(language == 'nah') { return 'Nahuatl'; }
+                            if(language == 'nap') { return 'Neapolitan'; }
+                            if(language == 'nd') { return 'North Ndebele'; }
+                            if(language == 'nds') { return 'Low German / Low Saxon'; }
+                            if(language == 'nds-nl') { return 'Dutch Low Saxon'; }
+                            if(language == 'ne') { return 'Nepali'; }
+                            if(language == 'new') { return 'Newar'; }
+                            if(language == 'ng') { return 'Ndonga'; }
+                            if(language == 'nl') { return 'Dutch'; }
+                            if(language == 'nn') { return 'Norwegian Nynorsk'; }
+                            if(language == 'no') { return 'Norwegian'; }
+                            if(language == 'nr') { return 'South Ndebele'; }
+                            if(language == 'nso') { return 'Northern Sotho'; }
+                            if(language == 'nrm') { return 'Norman'; }
+                            if(language == 'nv') { return 'Navajo'; }
+                            if(language == 'ny') { return 'Chichewa'; }
+                            if(language == 'oc') { return 'Occitan'; }
+                            if(language == 'oj') { return 'Ojibwa'; }
+                            if(language == 'om') { return 'Oromo'; }
+                            if(language == 'or') { return 'Oriya'; }
+                            if(language == 'os') { return 'Ossetian / Ossetic'; }
+                            if(language == 'pa') { return 'Panjabi / Punjabi'; }
+                            if(language == 'pag') { return 'Pangasinan'; }
+                            if(language == 'pam') { return 'Kapampangan'; }
+                            if(language == 'pap') { return 'Papiamentu'; }
+                            if(language == 'pdc') { return 'Pennsylvania German'; }
+                            if(language == 'pi') { return 'Pali'; }
+                            if(language == 'pih') { return 'Norfolk'; }
+                            if(language == 'pl') { return 'Polish'; }
+                            if(language == 'pms') { return 'Piedmontese'; }
+                            if(language == 'ps') { return 'Pashto'; }
+                            if(language == 'pt') { return 'Portuguese'; }
+                            if(language == 'qu') { return 'Quechua'; }
+                            if(language == 'rm') { return 'Raeto Romance'; }
+                            if(language == 'rmy') { return 'Romani'; }
+                            if(language == 'rn') { return 'Kirundi'; }
+                            if(language == 'ro') { return 'Romanian'; }
+                            if(language == 'roa-rup') { return 'Aromanian'; }
+                            if(language == 'ru') { return 'Russian'; }
+                            if(language == 'rw') { return 'Rwandi'; }
+                            if(language == 'sa') { return 'Sanskrit'; }
+                            if(language == 'sc') { return 'Sardinian'; }
+                            if(language == 'scn') { return 'Sicilian'; }
+                            if(language == 'sco') { return 'Scots'; }
+                            if(language == 'sd') { return 'Sindhi'; }
+                            if(language == 'se') { return 'Northern Sami'; }
+                            if(language == 'sg') { return 'Sango'; }
+                            if(language == 'sh') { return 'Serbo-Croatian'; }
+                            if(language == 'si') { return 'Sinhalese'; }
+                            if(language == 'simple') { return 'Simple English'; }
+                            if(language == 'sk') { return 'Slovak'; }
+                            if(language == 'sl') { return 'Slovenian'; }
+                            if(language == 'sm') { return 'Samoan'; }
+                            if(language == 'sn') { return 'Shona'; }
+                            if(language == 'so') { return 'Somalia'; }
+                            if(language == 'sq') { return 'Albanian'; }
+                            if(language == 'sr') { return 'Serbian'; }
+                            if(language == 'ss') { return 'Swati'; }
+                            if(language == 'st') { return 'Southern Sotho'; }
+                            if(language == 'su') { return 'Sundanese'; }
+                            if(language == 'sv') { return 'Swedish'; }
+                            if(language == 'sw') { return 'Swahili'; }
+                            if(language == 'ta') { return 'Tamil'; }
+                            if(language == 'te') { return 'Telugu'; }
+                            if(language == 'tet') { return 'Tetum'; }
+                            if(language == 'tg') { return 'Tajik'; }
+                            if(language == 'th') { return 'Thai'; }
+                            if(language == 'ti') { return 'Tigrinya'; }
+                            if(language == 'tk') { return 'Turkmen'; }
+                            if(language == 'tl') { return 'Tagalog'; }
+                            if(language == 'tlh') { return 'Klingon'; }
+                            if(language == 'tn') { return 'Tswana'; }
+                            if(language == 'to') { return 'Tonga'; }
+                            if(language == 'tpi') { return 'Tok Pisin'; }
+                            if(language == 'tr') { return 'Turkish'; }
+                            if(language == 'ts') { return 'Tsonga'; }
+                            if(language == 'tt') { return 'Tatar'; }
+                            if(language == 'tum') { return 'Tumbuka'; }
+                            if(language == 'tw') { return 'Twi'; }
+                            if(language == 'ty') { return 'Tahitian'; }
+                            if(language == 'udm') { return 'Udmurt'; }
+                            if(language == 'ug') { return 'Uyghur'; }
+                            if(language == 'uk') { return 'Ukrainian'; }
+                            if(language == 'ur') { return 'Urdu'; }
+                            if(language == 'uz') { return 'Uzbek'; }
+                            if(language == 'uz_AF') { return 'Uzbeki Afghanistan'; }
+                            if(language == 've') { return 'Venda'; }
+                            if(language == 'vi') { return 'Vietnamese'; }
+                            if(language == 'vec') { return 'Venetian'; }
+                            if(language == 'vls') { return 'West Flemish'; }
+                            if(language == 'vo') { return 'Volapük'; }
+                            if(language == 'wa') { return 'Walloon'; }
+                            if(language == 'war') { return 'Waray / Samar-Leyte Visayan'; }
+                            if(language == 'wo') { return 'Wolof'; }
+                            if(language == 'xal') { return 'Kalmyk'; }
+                            if(language == 'xh') { return 'Xhosa'; }
+                            if(language == 'xmf') { return 'Megrelian'; }
+                            if(language == 'yi') { return 'Yiddish'; }
+                            if(language == 'yo') { return 'Yoruba'; }
+                            if(language == 'za') { return 'Zhuang'; }
+                            if(language == 'zh') { return 'Chinese'; }
+                            if(language == 'zh-classical') { return 'Classical Chinese'; }
+                            if(language == 'zh-min-nan') { return 'Minnan'; }
+                            if(language == 'zh-yue') { return 'Cantonese'; }
+                            if(language == 'zu') { return 'Zulu'; }
+                            if(language == 'closed-zh-tw') { return 'Traditional Chinese'; }
+                            if(language == 'nb') { return 'Norwegian Bokmål'; }
+                            if(language == 'zh-tw') { return 'Traditional Chinese'; }
+                            if(language == 'tokipona') { return 'Tokipona'; }
+                            if(language == null) { return 'Null'; }
+                            else { return language; }
+                        }
+                        function transaction_time_data(transaction_time) {
+                            const unix_tt = transaction_time;
+                            const milliseconds = unix_tt * 1000;
+                            return `${Date(milliseconds)}`;
+                        }
+                        function is_cert_processed_data(is_cert_processed) {
+                            if(is_cert_processed === 0) {
+                                return 'False';
+                            }
+                            if(is_cert_processed === 1) {
+                                return 'True';
+                            }
+                        }
+                        function is_cert_valid_data(is_cert_valid) {
+                            if(is_cert_valid === 0) {
+                                return 'False';
+                            }
+                            if(is_cert_valid === 1) {
+                                return 'True';
+                            }
+                        }
+                        function created_at_data(created_at) {
+                            const ca_new = new Date(created_at.split('Z')[0]);
+                            return `${ca_new}`;
+                        }
+                        function is_filtered_data(is_filtered) {
+                            if(is_filtered == 0) {
+                                return 'False';
+                            }
+                            else if(is_filtered == 1) {
+                                return 'True';
+                            }
+                        }
+                        function is_nsfw_data(is_nsfw) {
+                            if(is_nsfw == 0) {
+                                return 'False';
+                            }
+                            else if(is_nsfw == 1) {
+                                return 'True';
+                            }
+                        }
+  
+                        // Stream information
+                        const audio_duration = stream.data[0].audio_duration; // Returns as null
+                        const author = stream.data[0].author;
+                        const bid_state = stream.data[0].bid_state;
+                        const certificate = stream.data[0].certificate; // Returns as null
+                        const city = stream.data[0].city; // Returns as null
+                        const claim_address = stream.data[0].claim_address;
+                        const claim_id = stream.data[0].claim_id;
+                        const claim_id_list = stream.data[0].claim_id_list; // Returns as null
+                        const claim_reference = stream.data[0].claim_reference; // Returns as null
+                        const claim_type = stream.data[0].claim_type;
+                        const code = stream.data[0].code; // Returns as null
+                        const content_type = stream.data[0].content_type; // Returns as null
+                        const country = stream.data[0].country; // Returns as null
+                        const created_at = stream.data[0].created_at;
+                        const description = stream.data[0].description;
+                        const duration = stream.data[0].duration; // Returns as null
+                        const effective_amount = stream.data[0].effective_amount;
+                        const email = stream.data[0].email; // Returns as null
+                        const fee = stream.data[0].fee;
+                        const fee_address = stream.data[0].fee_address;
+                        const fee_currency = stream.data[0].fee_currency; // Returns as null
+                        const frame_height = stream.data[0].frame_height; // Returns as null
+                        const frame_width = stream.data[0].frame_width; // Returns as null
+                        const has_claim_list = stream.data[0].has_claim_list; // Returns as null
+                        const height = stream.data[0].height;
+                        const id = stream.data[0].id;
+                        const is_cert_processed = stream.data[0].is_cert_processed;
+                        const is_cert_valid = stream.data[0].is_cert_valid;
+                        const is_filtered = stream.data[0].is_filtered;
+                        const is_nsfw = stream.data[0].is_nsfw;
+                        const language = stream.data[0].language;
+                        const latitude = stream.data[0].latitude; // Returns as null
+                        const license = stream.data[0].license;
+                        const license_url = stream.data[0].license_url;
+                        const list_type = stream.data[0].list_type; // Returns as null
+                        const longitude = stream.data[0].longitude; // Returns as null
+                        const modified_at = stream.data[0].modified_at;
+                        const stream_name = stream.data[0].name;
+                        const os = stream.data[0].os; // Returns as null
+                        const preview = stream.data[0].preview;
+                        const publisher_id = stream.data[0].publisher_id;
+                        const publisher_sig = stream.data[0].publisher_sig;
+                        const release_time = stream.data[0].release_time;
+                        const sd_hash = stream.data[0].sd_hash; // Returns as null
+                        const source_hash = stream.data[0].source_hash; // Returns as null
+                        const source_media_type = stream.data[0].source_media_type; // Returns as null
+                        const source_name = stream.data[0].source_name; // Returns as null
+                        const source_size = stream.data[0].source_size; // Returns as null
+                        const source_url = stream.data[0].source_url; // Returns as null
+                        const state = stream.data[0].state; // Returns as null
+                        const thumbnail_url = stream.data[0].thumbnail_url;
+                        const title = stream.data[0].title;
+                        const transaction_hash_id = stream.data[0].transaction_hash_id;
+                        const transaction_hash_update = stream.data[0].transaction_hash_update;
+                        const transaction_time = stream.data[0].transaction_time;
+                        const type = stream.data[0].type;
+                        const valid_at_height = stream.data[0].valid_at_height;
+                        const version = stream.data[0].version;
+                        const vout = stream.data[0].vout;
+                        const vout_update = stream.data[0].vout_update;
+                        const website_url = stream.data[0].website_url; // Returns as null
+
+                        if(document.getElementById('loading')) {
+                            document.getElementById('loading').remove()
+                        }
+                        if(document.getElementById(`stream_${claimId.ChannelClaimID}`)) {
+                            // Do not add
+                        }
+                        else {
+                            document.getElementById('streams').innerHTML += `
+                            <div id="stream_${claimId.ChannelClaimID}" class="stream_container">
+                                <div id="grid-container" class="grid-container">
+                                    <div class="thumbnail" style="background-color: #241c30;">
+                                        <a href="{data.stream_url}" target="_blank">
+                                            <img class="thumbnail_image" src="${thumbnail_url}" onError="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png';">
+                                        </a>
+                                    </div>
+                                    <div class="information">
+                                        <div id="information-data" class="information-data">
+                                            <h3 style="margin-top:-5px;">Stream information</h3>
+                                            <div class="led-red"></div>
+                                            <br>
+                                            <div>Title: ${title}</div>
+                                            <div>Streamer: <a href='${channelLink}'>${channel_name}</a></div>
+                                            <div>Stream: <a href='${stream_url}'>${stream_name}</a></div>
+                                            <div>Language: ${language_data(language)}</div>
+                                            <span id="moreText" style="display:none;">
+                                                <div>Filtered: ${is_filtered_data(is_filtered)}</div>
+                                                <div>NSFW: ${is_nsfw_data(is_nsfw)}</div>
+                                                <div>Viewers: ${viewCount}</div>
+                                                <div>Live: ${live}</div>
+                                                <div>Canonical URL: <a href='${stream_url}'>${stream_url}</a></div>
+                                                <div>Author: ${author}</div>
+                                                <div>Bid State: ${bid_state}</div>
+                                                <div>Claim Address: ${claim_address}</div>
+                                                <div>Claim ID: ${claim_id}</div>
+                                                <div>Created At: ${created_at_data(created_at)}</div>
+                                                <div>Description: ${description}</div>
+                                                <div>Effective Amount: ${effective_amount}</div>
+                                                <div>Fee: ${fee}</div>
+                                                <div>Height: ${height}</div>
+                                                <div>Id: ${id}</div>
+                                                <div>Is Cert Processed: ${is_cert_processed_data(is_cert_processed)}</div>
+                                                <div>Is Cert Valid: ${is_cert_valid_data(is_cert_valid)}</div>
+                                                <div>License: ${license}</div>
+                                                <div>License URL: ${license_url}</div>
+                                                <div>Modified At: ${modified_at}</div>
+                                                <div>Publisher ID: ${publisher_id}</div>
+                                                <div>Publisher Signature: ${publisher_sig}</div>
+                                                <div>Release Time: ${release_time}</div>
+                                                <div>Thumbnail URL: <a href='${thumbnail_url}'>${thumbnail_url}</a></div>
+                                                <div>Transaction Hash ID: ${transaction_hash_id}</div>
+                                                <div>Transaction Hash Update: ${transaction_hash_update}</div>
+                                                <div>Transaction Time: ${transaction_time_data(transaction_time)}</div>
+                                                <div>Type: ${type}</div>
+                                                <div>Valid At Height: ${valid_at_height}</div>
+                                                <div>Audio Duration: ${audio_duration}</div>
+                                                <div>Certificate: ${certificate}</div>
+                                                <div>City: ${city}</div>
+                                                <div>Claim ID List: ${claim_id_list}</div>
+                                                <div>Claim Reference: ${claim_reference}</div>
+                                                <div>Claim Type: ${claim_type}</div>
+                                                <div>Code: ${code}</div>
+                                                <div>Content Type: ${content_type}</div>
+                                                <div>Country: ${country}</div>
+                                                <div>Duration: ${duration}</div>
+                                                <div>E-Mail: ${email}</div>
+                                                <div>Fee Address: ${fee_address}</div>
+                                                <div>Fee Currency: ${fee_currency}</div>
+                                                <div>Frame Height: ${frame_height}</div>
+                                                <div>Frame Width: ${frame_width}</div>
+                                                <div>Has Claim List: ${has_claim_list}</div>
+                                                <div>Latitude: ${latitude}</div>
+                                                <div>List Type: ${list_type}</div>
+                                                <div>Longitude: ${longitude}</div>
+                                                <div>OS: ${os}</div>
+                                                <div>Preview: ${preview}</div>
+                                                <div>SD Hash: ${sd_hash}</div>
+                                                <div>Source Hash: ${source_hash}</div>
+                                                <div>Source Media Type: ${source_media_type}</div>
+                                                <div>Source Name: ${source_name}</div>
+                                                <div>Source Size: ${source_size}</div>
+                                                <div>Source URL: ${source_url}</div>
+                                                <div>State: ${state}</div>
+                                                <div>Timestamp: ${timestamp}</div>
+                                                <div>Version: ${version}</div>
+                                                <div>Vout: ${vout}</div>
+                                                <div>Vout Update: ${vout_update}</div>
+                                                <div>Website URL: ${website_url}</div>
+                                            </span>
+                                            <button onclick="showMore(this)" id="showMore">Show More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }
+                    }
+                })
+            })
+        }
     })
 }

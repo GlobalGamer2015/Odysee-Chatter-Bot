@@ -17,7 +17,6 @@
     <script src='http://localhost:4187/files/js/render.js'></script>
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<script src='http://localhost:4187/files/js/livestreams/data_handler.js'></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="http://localhost:4187/files/socket.io/socket.io.js"></script>
     <script>
@@ -35,112 +34,13 @@
         }
       }
     </script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const socket = io("http://localhost:4187");
-        socket.on('livestream', (data) => {
-          if(document.getElementById('loading')) {
-            document.getElementById('loading').remove()
-          }
-          if(document.getElementById(`stream_${data.claim_id}`)) {
-            // Do not add
-          }
-          else {
-            document.getElementById('streams').innerHTML += `
-            <div id="stream_${data.claim_id}" class="stream_container">
-              <div id="grid-container" class="grid-container">
-                <div class="thumbnail" style="background-color: #241c30;">
-                  <a href="${data.stream_url}" target="_blank">
-                    <img class="thumbnail_image" src="${data.thumbnail_url}" onError="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Odyssey_logo_1.svg/220px-Odyssey_logo_1.svg.png';">
-                  </a>
-                </div>
-                <div class="information">
-                  <div id="information-data" class="information-data">
-                    <h3 style="margin-top:-5px;">Stream information</h3>
-                    <div class="led-red"></div>
-                    <br>
-                    ${title(data)}
-                    ${channelLink(data)}
-                    ${stream_name(data)}
-                    ${language(data)}
-                    <span id="moreText" style="display:none;">
-                    ${is_filtered(data)}
-                    ${is_nsfw(data)}
-                    ${viewCount(data)}
-                    ${live(data)}
-                    ${canonicalUrl(data)}
-                    ${_name(data)}
-                    ${shortUrl(data)}
-                    ${claimId(data)}
-                    ${author(data)}
-                    ${bid_state(data)}
-                    ${claim_address(data)}
-                    ${claim_id(data)}
-                    ${created_at(data)}
-                    ${description(data)}
-                    ${effective_amount(data)}
-                    ${fee(data)}
-                    ${height(data)}
-                    ${id(data)}
-                    ${is_cert_processed(data)}
-                    ${is_cert_valid(data)}
-                    ${license(data)}
-                    ${license_url(data)}
-                    ${modified_at(data)}
-                    ${publisher_id(data)}
-                    ${publisher_sig(data)}
-                    ${release_time(data)}
-                    ${thumbnail_url(data)}
-                    ${transaction_hash_id(data)}
-                    ${transaction_hash_update(data)}
-                    ${transaction_time(data)}
-                    ${type(data)}
-                    ${valid_at_height(data)}
-                    ${audio_duration(data)}
-                    ${certificate(data)}
-                    ${city(data)}
-                    ${claim_id_list(data)}
-                    ${claim_reference(data)}
-                    ${claim_type(data)}
-                    ${code(data)}
-                    ${content_type(data)}
-                    ${country(data)}
-                    ${duration(data)}
-                    ${email(data)}
-                    ${fee_address(data)}
-                    ${fee_currency(data)}
-                    ${frame_height(data)}
-                    ${frame_width(data)}
-                    ${has_claim_list(data)}
-                    ${latitude(data)}
-                    ${list_type(data)}
-                    ${longitude(data)}
-                    ${os(data)}
-                    ${preview(data)}
-                    ${sd_hash(data)}
-                    ${source_hash(data)}
-                    ${source_media_type(data)}
-                    ${source_name(data)}
-                    ${source_size(data)}
-                    ${source_url(data)}
-                    ${state(data)}
-                    ${timestamp(data)}
-                    ${version(data)}
-                    ${vout(data)}
-                    ${vout_update(data)}
-                    ${website_url(data)}
-                    </span>
-                    <button onclick="showMore(this)" id="showMore">Show More</button>
-                  </div>
-                </div>
-              </div>
-            </div>`;
-          }
-        })
-      }, false);
-    </script>
+    
+		<script src="http://localhost:4187/files/js/sentry_7.16.0.bundle.min.js" crossorigin="anonymous"></script>
+		<script>
+			SentryBrowser.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+		</script>
 	</head>
-	<body>
+	<body onload="GetStreams()">
 		<nav class="navbar">
 			<div class="navbar-collapse collapse">
 				<ul class="navbar-nav">

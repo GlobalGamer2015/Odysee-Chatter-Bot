@@ -8,6 +8,7 @@ const API = require('./api');
 const process = require('process');
 
 module.exports = function(ChannelClaimId,io) {
+	let Stream_Claim_Id;
 	getStreamClaimId(ChannelClaimId)
 
 	function getStreamClaimId(ChannelClaimId) {
@@ -16,10 +17,10 @@ module.exports = function(ChannelClaimId,io) {
 			try {
 				const response = await got(url, { json: true, timeout: 5000, retry: 2, allowGetBody: true, responseType: 'json' });
 				if (response.body.data.length === 0) {
-					global.Stream_Claim_Id = claim_id.value;
+					Stream_Claim_Id = claim_id.value;
 					reconnect(Stream_Claim_Id);
 				} else {
-					global.Stream_Claim_Id = response.body.data[0].claim_id;
+					Stream_Claim_Id = response.body.data[0].claim_id;
 					reconnect(Stream_Claim_Id);
 				}
 			} catch (error) {

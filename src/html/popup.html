@@ -29,6 +29,11 @@
                 window.localStorage.setItem('removeComment', comment_id)
             }
         </script>
+        
+		<script src="http://localhost:4187/files/js/sentry_7.16.0.bundle.min.js" crossorigin="anonymous"></script>
+		<script>
+			SentryBrowser.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+		</script>
 	</head>
 	<body onload="Interacter(tempData,sdk)">
         <div id="menu" class="menu__list">

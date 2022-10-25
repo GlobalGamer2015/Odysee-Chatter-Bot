@@ -3,7 +3,7 @@ body {
 	padding: 0;
 	margin: 0;
 	background-color: #181021 !important;
-	background-image: url('https://odysee-chatter.com/files/img/Streaming.png');
+	background-image: url('http://localhost:4187/files/img/Streaming.png') !important;
 	background-position: top center;
 	background-repeat: repeat-y;
 	background-size: 1920px;

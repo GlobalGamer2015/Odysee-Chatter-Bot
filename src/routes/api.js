@@ -5,19 +5,6 @@ const logger = require('./log');
 
 module.exports = function() {
 
-	function connecting(data) {
-		console.log(JSON.stringify(data.body))
-	}
-
-	function replacePartOfMessage(comment) {
-		if(comment.includes('"')) {
-			return comment.replace(/"/g, "'");
-		}
-		else {
-			return comment;
-		}
-	}
-
 	function createComment(comment) {
 		try {
 			const { Lbry } = require('lbry-sdk-nodejs/lib/sdk')
@@ -74,7 +61,6 @@ module.exports = function() {
 	}
 
 	module.exports.createComment = createComment;
-	module.exports.connecting = connecting;
 
 	return router
 }

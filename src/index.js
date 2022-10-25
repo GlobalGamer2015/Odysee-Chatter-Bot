@@ -1,6 +1,8 @@
 'use strict';
 
-const config_data = require('./config.json');
+const Sentry = require('@sentry/electron');
+Sentry.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+
 const express = require('express');
 const serverApp = express();
 const http = require('http');
@@ -10,16 +12,13 @@ const logger = require('./routes/log');
 const { Server } = require("socket.io");
 const io = new Server(server);
 const path = require('path');
-const { app, BrowserWindow, screen, Menu, ipcRenderer, ipcMain } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const { is } = require('electron-util');
 const unhandled = require('electron-unhandled');
 const contextMenu = require('electron-context-menu');
-const Api = require('./routes/api')();
 const Alert = require('electron-alert');
-const fetch = require('node-fetch');
 require('@electron/remote/main').initialize();
-//const user = {};
 
 autoUpdater.setFeedURL({
 	provider: 'github',
@@ -30,6 +29,8 @@ autoUpdater.setFeedURL({
 
 unhandled();
 contextMenu();
+
+app.disableHardwareAcceleration();
 
 // Note: Must match `build.appId` in package.json
 app.setAppUserModelId('com.GG2015.OdyseeChatterBot');
@@ -66,18 +67,19 @@ io.on('connection', (socket) => {
 let mainWindow;
 let win;
 
-const createMainWindow = async () => {
-	const {width,height} = screen.getPrimaryDisplay().workAreaSize
+app.whenReady().then(async () => {
+	const { screen } = require('electron');
+	const {width,height} = screen.getPrimaryDisplay().workAreaSize;
 	win = new BrowserWindow({
 		title: app.name,
 		show: false,
 		width: width,
 		height: height,
 		webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      		nodeIntegration: true,
+      		contextIsolation: false,
 			enableRemoteModule: true
-    }
+    	}
 	});
 	win.setBackgroundColor('#241c30');
 	require("@electron/remote/main").enable(win.webContents)
@@ -85,7 +87,6 @@ const createMainWindow = async () => {
 	win.setMenu(null)
 
 	win.on('ready-to-show', () => {
-		win.setTitle(app.name)
 		win.show();
 	});
 
@@ -95,22 +96,8 @@ const createMainWindow = async () => {
 		mainWindow = undefined;
 	});
 
-	//await win.loadFile(path.join(__dirname, './html/connect.html'));
-	await win.loadURL(`${config_data.baseURL}/connect`);
-
-	return win;
-};
-
-//const { auth } = require('express-openid-connect');
-
-/*const config = {
-  	authRequired: false,
-  	auth0Logout: true,
-  	secret: config_data.secret,
-  	baseURL: config_data.baseURL,
-  	clientID: config_data.clientID,
-  	issuerBaseURL: config_data.issuerBaseURL
-};*/
+	await win.loadURL(`http://localhost:4187/connect`);
+});
 
 // View engine setup
 serverApp.set('views', path.join(__dirname, 'views'));
@@ -118,8 +105,6 @@ serverApp.set('view engine', 'pug');
 serverApp.engine('html', require('ejs').renderFile);
 serverApp.set('views',__dirname+'/html/');
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-//serverApp.use(auth(config));
 
 serverApp.get('/connect', function (req, res, next) {
 	res.render('./connect.html')
@@ -132,14 +117,8 @@ serverApp.get('/connecting', function (req, res, next) {
 })
 
 serverApp.get('/livestreams', function (req, res, next) {
-	const Livestreams = require('./routes/livestreams')(io);
 	res.render('./livestreams.html')
 })
-
-// req.isAuthenticated is provided from the auth router
-/*serverApp.get('/', (req, res, next) => {
-  	res.send(req.oidc.isAuthenticated() ? connect(req, res) : app.quit());
-});*/
 
 /* GET popup. */
 serverApp.get(`/popup`, function (req, res, next) {
@@ -202,11 +181,6 @@ app.on('activate', async () => {
 		mainWindow = await createMainWindow();
 	}
 });
-
-(async () => {
-	await app.whenReady();
-	mainWindow = await createMainWindow();
-})();
 
 server.listen(serverPort), (err) => {
   if(err) {

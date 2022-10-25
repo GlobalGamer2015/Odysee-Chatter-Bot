@@ -18,6 +18,11 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src='http://localhost:4187/files/js/languages.js'></script>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
+		<script src="http://localhost:4187/files/js/sentry_7.16.0.bundle.min.js" crossorigin="anonymous"></script>
+		<script>
+			SentryBrowser.init({ dsn: "https://32e566d62a3d46cdafa1a806df0e0f00@app.glitchtip.com/1987" });
+		</script>
 	</head>
 	<body onload="version(), ReadMainPage_Language(), OdyseeBackendStatus()">
 		<nav class="navbar">
